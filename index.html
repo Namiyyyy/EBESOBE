@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EBE SOBE Kollektiv</title>
+    <style>
+        /* --- RESET & VARIABLES --- */
+        :root {
+            --main-yellow: #FFD600; 
+            --text-color: #1a1a1a;
+            --border-color: #dcb600;
+            --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --font-mono: 'Courier New', Courier, monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            color: var(--text-color);
+            overflow-x: hidden;
+            background-color: black; /* Fallback color */
+        }
+
+        /* --- PAGE 1: LANDING --- */
+        #landing-page {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            padding: 40px;
+            overflow: hidden;
+        }
+
+        /* --- CAROUSEL STYLES --- */
+        .background-carousel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; /* Behind content */
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out; /* Smooth fade effect */
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        /* The Yellow Card */
+        .card {
+            background-color: var(--main-yellow);
+            width: 450px;
+            max-width: 90%;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 10; /* Above carousel */
+            position: relative;
+        }
+
+        h1.title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 0.9;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+            text-transform: uppercase;
+        }
+
+        .subtitle-nav {
+            font-family: var(--font-mono);
+            margin-bottom: 30px;
+            font-size: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .subtitle-nav a {
+            text-decoration: none;
+            color: black;
+            margin-right: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .subtitle-nav a:hover { text-decoration: underline; }
+
+        /* The List */
+        .act-list {
+            list-style: none;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+        }
+
+        .act-item {
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .act-item:hover {
+            background-color: rgba(0,0,0,0.05);
+            padding-left: 5px;
+        }
+
+        .act-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .act-desc {
+            opacity: 0.8;
+            line-height: 1.4;
+        }
+
+        .strike {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+
+        /* Buttons bottom */
+        .card-footer {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            background: transparent;
+            border: 1px solid var(--text-color);
+            border-radius: 6px;
+            text-align: center;
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-decoration: none;
+            color: black;
+        }
+
+        .btn:hover {
+            background: black;
+            color: var(--main-yellow);
+        }
+
+        /* Social Sidebar (Bottom Right) */
+        .social-sidebar {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            background: var(--main-yellow);
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 10; /* Above carousel */
+        }
+
+        .social-sidebar i {
+            width: 20px;
+            height: 20px;
+            background-color: black;
+            border-radius: 50%;
+            display: block;
+        }
+
+        /* --- PAGE 2: ARCHIVE / DETAILS --- */
+        #detail-page {
+            display: none; 
+            background-color: var(--main-yellow);
+            min-height: 100vh;
+            padding: 40px;
+            font-family: 'Helvetica Neue', sans-serif;
+        }
+
+        .detail-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr 2fr;
+            margin-bottom: 40px;
+            font-size: 1.2rem;
+            border-bottom: 1px solid black;
+            padding-bottom: 20px;
+        }
+
+        .back-btn {
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .back-btn:hover { text-decoration: underline; }
+
+        /* Grid Layout for Content */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            height: calc(100vh - 150px);
+        }
+
+        /* Left Column: Table */
+        .list-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .list-table th {
+            text-align: left;
+            padding-bottom: 20px;
+            font-weight: normal;
+            border-bottom: 1px solid black;
+        }
+
+        .list-table td {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.2);
+            cursor: pointer;
+        }
+        
+        .list-table tr:hover td {
+            font-weight: bold;
+        }
+
+        /* Right Column: Visual Work */
+        .work-display {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .work-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid black;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .placeholder-box {
+            background-color: #f0f0f0; 
+            width: 100%;
+            height: 400px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            font-size: 0.8rem;
+        }
+
+        .cross {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+        }
+        .cross::before, .cross::after {
+            content: '';
+            position: absolute;
+            background: #999;
+        }
+        .cross::before { width: 1px; height: 10px; left: 5px; top: 0; }
+        .cross::after { width: 10px; height: 1px; top: 5px; left: 0; }
+
+        .tl { top: 10px; left: 10px; }
+        .tr { top: 10px; right: 10px; }
+        .bl { bottom: 10px; left: 10px; }
+        .br { bottom: 10px; right: 10px; }
+
+        .detail-footer {
+            margin-top: 20px;
+            border-top: 1px solid black;
+            padding-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- === LANDING PAGE === -->
+    <section id="landing-page">
+        
+        <!-- === BACKGROUND CAROUSEL === -->
+        <!-- CHANGE THE URLS BELOW TO YOUR OWN IMAGES -->
+        <div class="background-carousel">
+            <!-- Image 1 -->
+            <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1542385150-f80e6c527e7f?q=80&w=2521&auto=format&fit=crop');"></div>
+            <!-- Image 2 -->
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=2574&auto=format&fit=crop');"></div>
+            <!-- Image 3 -->
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2694&auto=format&fit=crop');"></div>
+        </div>
+
+        <!-- Yellow Box -->
+        <div class="card">
+            <h1 class="title">EBE SOBE<br>KOLLEKTIV</h1>
+            
+            <div class="subtitle-nav">
+                <a href="#">About</a>
+                <a href="#">CV</a>
+            </div>
+
+            <ul class="act-list">
+                <li class="act-item" onclick="openDetails('Mar. 15, 2026')">
+                    <div class="act-header">
+                        <span>Mar. 15, 2026</span>
+                        <span>Lorem 01</span>
+                    </div>
+                    <div class="act-desc">
+                        Urban Act: Berlin Alexanderplatz<br>
+                        Eiusmod Tempor, 2025
+                    </div>
+                </li>
+
+                <li class="act-item strike">
+                    <div class="act-header">
+                        <span>Mar. 22, 2026</span>
+                        <span>Lorem 02</span>
+                    </div>
+                    <div class="act-desc">
+                        Nullam Varius, Turpis ET<br>
+                        Scelerisque (Canceled)
+                    </div>
+                </li>
+
+                <li class="act-item" onclick="openDetails('Mar. 23, 2026')">
+                    <div class="act-header">
+                        <span>Mar. 23, 2026</span>
+                        <span>Lorem 03</span>
+                    </div>
+                    <div class="act-desc">
+                        Fusce ID Dui, Sit<br>
+                        Tellus, 2025
+                    </div>
+                </li>
+
+                <li class="act-item" onclick="openDetails('Aug. 3, 2026')">
+                    <div class="act-header">
+                        <span>Aug. 3, 2026</span>
+                        <span>Lorem 04</span>
+                    </div>
+                    <div class="act-desc">
+                        Tristique Neque Consequat, ES<br>
+                        Sapien Varius Nunc
+                    </div>
+                </li>
+            </ul>
+
+            <div class="card-footer">
+                <a href="#" class="btn">Contact</a>
+                <a href="#" class="btn">IG</a>
+            </div>
+        </div>
+
+        <!-- Social Icons -->
+        <div class="social-sidebar">
+            <i></i>
+            <i></i>
+            <i></i>
+            <i></i>
+        </div>
+
+    </section>
+
+    <!-- === DETAIL / ARCHIVE PAGE === -->
+    <section id="detail-page">
+        <div class="detail-header">
+            <div class="back-btn" onclick="closeDetails()">← EBE SOBE Demo</div>
+            <div>Information</div>
+            <div>Selected Work</div>
+        </div>
+
+        <div class="content-grid">
+            <div class="list-column">
+                <table class="list-table">
+                    <thead>
+                        <tr>
+                            <th>Client</th>
+                            <th>Project</th>
+                            <th>Year</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>SED_DO</td><td>Ref. R/XTR-082</td><td>2049</td></tr>
+                        <tr><td>SED_DO</td><td>R/PRT-017</td><td>2048</td></tr>
+                        <tr><td>SED_DO</td><td>Ref. R/CXX-500</td><td>2047</td></tr>
+                        <tr><td>SED_DO</td><td>Ref. R/ANV-310</td><td>2046</td></tr>
+                        <tr><td>SED_DO</td><td>Ref. R/FTH-053</td><td>2045</td></tr>
+                        <tr><td>SED_DO</td><td>R/HLT-904</td><td>2044</td></tr>
+                        <tr><td>SED_DO</td><td>X/BXN-014</td><td>2043</td></tr>
+                        <tr><td>SED_DO</td><td>Ref. X/QOR-809</td><td>2042</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="work-display">
+                <div class="work-header">
+                    <span>SED_DO</span>
+                    <span>Ref. R/XTR-082</span>
+                    <span>2049</span>
+                </div>
+                
+                <div class="placeholder-box">
+                    <div class="cross tl"></div><div class="cross tr"></div>
+                    <span>Cargo® Rectangular Placeholder</span>
+                    <div class="cross bl"></div><div class="cross br"></div>
+                </div>
+
+                <div class="work-header" style="margin-top: 20px;">
+                    <span>SED_DO</span>
+                    <span>Ref. R/XTR-082</span>
+                    <span>2049</span>
+                </div>
+
+                <div class="placeholder-box" style="height: 200px;">
+                    <div class="cross tl"></div><div class="cross tr"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-footer">
+            <span id="current-time">14:05:22</span>
+            <span>IG, Email</span>
+        </div>
+    </section>
+
+    <!-- === JAVASCRIPT === -->
+    <script>
+        // --- 1. Page Navigation ---
+        const landingPage = document.getElementById('landing-page');
+        const detailPage = document.getElementById('detail-page');
+
+        function openDetails(dateId) {
+            landingPage.style.display = 'none';
+            detailPage.style.display = 'block';
+        }
+
+        function closeDetails() {
+            detailPage.style.display = 'none';
+            landingPage.style.display = 'flex';
+        }
+
+        // --- 2. Clock ---
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('current-time').innerText = now.toLocaleTimeString();
+        }, 1000);
+
+        // --- 3. Background Carousel Logic ---
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+        const slideInterval = 5000; // Change image every 5 seconds
+
+        function nextSlide() {
+            // Remove 'active' class from current slide
+            slides[currentSlide].classList.remove('active');
+            
+            // Calculate next slide index (wrap around using modulo)
+            currentSlide = (currentSlide + 1) % slides.length;
+            
+            // Add 'active' class to next slide
+            slides[currentSlide].classList.add('active');
+        }
+
+        // Start the automated slideshow
+        setInterval(nextSlide, slideInterval);
+    </script>
+</body>
+</html>
