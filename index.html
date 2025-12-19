@@ -48,6 +48,7 @@
             z-index: 1; /* Behind content */
             background-color: #000; /* Fallback black background */
             overflow: hidden;
+            min-height: 100vh;
         }
 
         .slide {
@@ -66,9 +67,14 @@
         }
 
         .slide.active {
-            opacity: 1;
+            opacity: 1 !important;
             z-index: 2;
             display: block;
+        }
+        
+        /* Ensure first slide is visible immediately */
+        .slide:first-child {
+            opacity: 1;
         }
         
         /* Ensure images are visible when loaded */
@@ -344,7 +350,7 @@
         <!-- === BACKGROUND CAROUSEL === -->
         <!-- Optimized images from the 'background-images/optimized' folder -->
         <div class="background-carousel">
-            <div class="slide active" style="background-image: url('background-images/optimized/1.jpg');"></div>
+            <div class="slide active" style="background-image: url('background-images/optimized/1.jpg'); opacity: 1 !important;"></div>
             <div class="slide" style="background-image: url('background-images/optimized/2.jpg');"></div>
             <div class="slide" style="background-image: url('background-images/optimized/2-2.jpg');"></div>
             <div class="slide" style="background-image: url('background-images/optimized/3.jpg');"></div>
@@ -477,7 +483,7 @@
         let carouselInterval = null;
         let isPaused = false;
 
-        // Verify images are loading (images are already set via inline styles)
+        // Verify and ensure images are loading
         slides.forEach((slide, index) => {
             const bgImage = slide.style.backgroundImage;
             if (bgImage) {
@@ -488,20 +494,40 @@
                     
                     img.onload = function() {
                         console.log(`✅ Image ${index + 1} loaded: ${imgUrl}`);
-                        // Ensure first active slide is visible
-                        if (index === 0 && slide.classList.contains('active')) {
+                        // Ensure slide is visible when image loads
+                        if (slide.classList.contains('active')) {
                             slide.style.opacity = '1';
+                            slide.style.display = 'block';
+                        }
+                        // Force first slide to be visible
+                        if (index === 0) {
+                            slide.style.opacity = '1';
+                            slide.style.display = 'block';
+                            slide.classList.add('active');
                         }
                     };
                     
                     img.onerror = function() {
                         console.error(`❌ Failed to load image ${index + 1}: ${imgUrl}`);
+                        console.error(`   Tried path: ${imgUrl}`);
                     };
                     
                     img.src = imgUrl;
+                } else {
+                    console.warn(`⚠️ Could not parse background-image for slide ${index + 1}`);
                 }
+            } else {
+                console.warn(`⚠️ No background-image found for slide ${index + 1}`);
             }
         });
+        
+        // Ensure first slide is visible immediately
+        if (slides.length > 0) {
+            const firstSlide = slides[0];
+            firstSlide.style.opacity = '1';
+            firstSlide.style.display = 'block';
+            firstSlide.classList.add('active');
+        }
 
         function goToSlide(index) {
             // Remove 'active' class from current slide
