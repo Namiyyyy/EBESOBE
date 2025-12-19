@@ -597,10 +597,17 @@
     <!-- === JAVASCRIPT === -->
     <script>
         // --- 1. Page Navigation ---
-        const landingPage = document.getElementById('landing-page');
-        const detailPage = document.getElementById('detail-page');
-        const aboutPage = document.getElementById('about-page');
-        const contactPage = document.getElementById('contact-page');
+        let landingPage, detailPage, aboutPage, contactPage;
+
+        function getPageElements() {
+            landingPage = document.getElementById('landing-page');
+            detailPage = document.getElementById('detail-page');
+            aboutPage = document.getElementById('about-page');
+            contactPage = document.getElementById('contact-page');
+        }
+
+        // Initialize page elements
+        getPageElements();
 
         function hideAllPages() {
             if (landingPage) landingPage.style.display = 'none';
@@ -609,87 +616,85 @@
             if (contactPage) contactPage.style.display = 'none';
         }
 
-        function goHome() {
-            hideAllPages();
-            if (landingPage) {
-                landingPage.style.display = 'flex';
-            }
-        }
-
-        function openDetails(dateId) {
-            hideAllPages();
-            if (detailPage) {
-                detailPage.style.display = 'block';
-                // Small delay to ensure DOM is ready
-                setTimeout(function() {
-                    populateActTable();
-                }, 10);
-            }
-        }
-
-        function closeDetails() {
-            hideAllPages();
-            if (landingPage) {
-                landingPage.style.display = 'flex';
-            }
-        }
-
-        function openAbout() {
-            hideAllPages();
-            if (aboutPage) {
-                aboutPage.style.display = 'block';
-            }
-        }
-
-        function openContact() {
-            hideAllPages();
-            if (contactPage) {
-                contactPage.style.display = 'block';
-            }
-        }
-
-        // Make functions globally accessible and add error handling
+        // Navigation functions - defined globally and refresh page elements
         window.goHome = function() {
-            try {
-                goHome();
-            } catch(e) {
-                console.error('Error in goHome:', e);
-                if (landingPage) landingPage.style.display = 'flex';
+            getPageElements();
+            hideAllPages();
+            const lp = document.getElementById('landing-page');
+            if (lp) {
+                lp.style.display = 'flex';
             }
         };
 
         window.closeDetails = function() {
-            try {
-                closeDetails();
-            } catch(e) {
-                console.error('Error in closeDetails:', e);
-                if (landingPage) landingPage.style.display = 'flex';
+            getPageElements();
+            hideAllPages();
+            const lp = document.getElementById('landing-page');
+            if (lp) {
+                lp.style.display = 'flex';
             }
         };
 
         window.openDetails = function(dateId) {
-            try {
-                openDetails(dateId);
-            } catch(e) {
-                console.error('Error in openDetails:', e);
+            getPageElements();
+            hideAllPages();
+            const dp = document.getElementById('detail-page');
+            if (dp) {
+                dp.style.display = 'block';
+                setTimeout(function() {
+                    populateActTable();
+                }, 10);
             }
         };
 
         window.openAbout = function() {
-            try {
-                openAbout();
-            } catch(e) {
-                console.error('Error in openAbout:', e);
+            getPageElements();
+            hideAllPages();
+            const ap = document.getElementById('about-page');
+            if (ap) {
+                ap.style.display = 'block';
             }
         };
 
         window.openContact = function() {
-            try {
-                openContact();
-            } catch(e) {
-                console.error('Error in openContact:', e);
+            getPageElements();
+            hideAllPages();
+            const cp = document.getElementById('contact-page');
+            if (cp) {
+                cp.style.display = 'block';
             }
         };
+
+        // Also add event listeners as backup
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add event listeners to back buttons
+            const backButtons = document.querySelectorAll('.back-btn');
+            backButtons.forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const onclick = btn.getAttribute('onclick');
+                    if (onclick && onclick.includes('goHome')) {
+                        window.goHome();
+                    } else if (onclick && onclick.includes('closeDetails')) {
+                        window.closeDetails();
+                    }
+                });
+            });
+
+            // Add event listeners to header links
+            const headerLinks = document.querySelectorAll('.header-link');
+            headerLinks.forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const onclick = link.getAttribute('onclick');
+                    if (onclick && onclick.includes('openAbout')) {
+                        window.openAbout();
+                    } else if (onclick && onclick.includes('openContact')) {
+                        window.openContact();
+                    }
+                });
+            });
+        });
 
         // Make functions globally accessible
         window.goHome = goHome;
