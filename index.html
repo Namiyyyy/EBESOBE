@@ -1004,11 +1004,12 @@
             const maxImages = 20; // Maximum number of images to try loading
             
             // Create image elements that will load if files exist
+            // Try both .jpg and .jpeg extensions
             for (let i = 1; i <= maxImages; i++) {
                 imagesHTML += `
                     <div class="work-image" style="display: none;" data-img="${imageFolder}${i}.jpg">
                         <img src="${imageFolder}${i}.jpg" alt="${projectNameLine1} - Image ${i}" 
-                             onerror="this.parentElement.style.display='none';" 
+                             onerror="this.onerror=null; this.src='${imageFolder}${i}.jpeg';" 
                              onload="this.parentElement.style.display='block';">
                     </div>
                 `;
