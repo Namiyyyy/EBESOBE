@@ -188,6 +188,32 @@
             display: block;
         }
 
+        /* Carousel Navigation Buttons */
+        .carousel-nav-btn {
+            width: 40px;
+            height: 40px;
+            background-color: black;
+            border: none;
+            border-radius: 50%;
+            color: var(--main-yellow);
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            font-weight: bold;
+        }
+
+        .carousel-nav-btn:hover {
+            background-color: rgba(0,0,0,0.8);
+            transform: scale(1.1);
+        }
+
+        .carousel-nav-btn:active {
+            transform: scale(0.95);
+        }
+
         /* --- PAGE 2: ARCHIVE / DETAILS --- */
         #detail-page {
             display: none; 
@@ -306,10 +332,18 @@
         <!-- === BACKGROUND CAROUSEL === -->
         <!-- Images from the 'background images' folder -->
         <div class="background-carousel">
-            <!-- Image 1 -->
             <div class="slide active" style="background-image: url('background images/1.png');"></div>
-            <!-- Image 2 -->
             <div class="slide" style="background-image: url('background images/2.png');"></div>
+            <div class="slide" style="background-image: url('background images/2_2.png');"></div>
+            <div class="slide" style="background-image: url('background images/3.png');"></div>
+            <div class="slide" style="background-image: url('background images/4.png');"></div>
+            <div class="slide" style="background-image: url('background images/5.png');"></div>
+            <div class="slide" style="background-image: url('background images/6.png');"></div>
+            <div class="slide" style="background-image: url('background images/7.png');"></div>
+            <div class="slide" style="background-image: url('background images/8.png');"></div>
+            <div class="slide" style="background-image: url('background images/9.png');"></div>
+            <div class="slide" style="background-image: url('background images/10.png');"></div>
+            <div class="slide" style="background-image: url('background images/11.png');"></div>
         </div>
 
         <!-- Yellow Box -->
@@ -373,12 +407,11 @@
             </div>
         </div>
 
-        <!-- Social Icons -->
+        <!-- Carousel Navigation -->
         <div class="social-sidebar">
-            <i></i>
-            <i></i>
-            <i></i>
-            <i></i>
+            <button class="carousel-nav-btn" id="prev-btn" onclick="previousSlide()" title="Previous image">‹</button>
+            <button class="carousel-nav-btn" id="next-btn" onclick="nextSlide()" title="Next image">›</button>
+            <button class="carousel-nav-btn" id="pause-btn" onclick="togglePause()" title="Pause/Play">⏸</button>
         </div>
 
     </section>
@@ -471,20 +504,63 @@
         const slides = document.querySelectorAll('.slide');
         let currentSlide = 0;
         const slideInterval = 5000; // Change image every 5 seconds
+        let carouselInterval = null;
+        let isPaused = false;
 
-        function nextSlide() {
+        function goToSlide(index) {
             // Remove 'active' class from current slide
             slides[currentSlide].classList.remove('active');
             
-            // Calculate next slide index (wrap around using modulo)
-            currentSlide = (currentSlide + 1) % slides.length;
+            // Set new slide index
+            currentSlide = index;
             
-            // Add 'active' class to next slide
+            // Add 'active' class to new slide
             slides[currentSlide].classList.add('active');
         }
 
+        function nextSlide() {
+            // Calculate next slide index (wrap around using modulo)
+            const nextIndex = (currentSlide + 1) % slides.length;
+            goToSlide(nextIndex);
+        }
+
+        function previousSlide() {
+            // Calculate previous slide index (wrap around)
+            const prevIndex = (currentSlide - 1 + slides.length) % slides.length;
+            goToSlide(prevIndex);
+        }
+
+        function togglePause() {
+            isPaused = !isPaused;
+            const pauseBtn = document.getElementById('pause-btn');
+            
+            if (isPaused) {
+                // Pause the carousel
+                if (carouselInterval) {
+                    clearInterval(carouselInterval);
+                    carouselInterval = null;
+                }
+                pauseBtn.innerHTML = '▶';
+                pauseBtn.title = 'Play';
+            } else {
+                // Resume the carousel
+                startCarousel();
+                pauseBtn.innerHTML = '⏸';
+                pauseBtn.title = 'Pause';
+            }
+        }
+
+        function startCarousel() {
+            // Clear any existing interval
+            if (carouselInterval) {
+                clearInterval(carouselInterval);
+            }
+            // Start the automated slideshow
+            carouselInterval = setInterval(nextSlide, slideInterval);
+        }
+
         // Start the automated slideshow
-        setInterval(nextSlide, slideInterval);
+        startCarousel();
 
         // --- 4. Act List Data (embedded from CSV) ---
         // This data is automatically updated from act-list-template.csv
@@ -516,9 +592,9 @@
                 const clickable = (item['Clickable'] || 'No').toLowerCase();
                 
                 // Build class string
-                // Check if status is "canceled" or contains "cancel" (case insensitive)
+                // Check if status is "canceled", "done", or contains "cancel"/"done" (case insensitive)
                 let classString = 'act-item';
-                if (status === 'canceled' || status.includes('cancel')) {
+                if (status === 'canceled' || status.includes('cancel') || status === 'done' || status.includes('done')) {
                     classString += ' strike';
                 }
                 
