@@ -1,6 +1,5 @@
-Date,Code/ID,Description Line 1,Description Line 2,Status,Clickable
-"Mar. 15, 2026",Lorem 01,Urban Act: Berlin Alexanderplatz,"Eiusmod Tempor, 2025",Active,Yes
-"Mar. 22, 2026",Lorem 02,Nullam Varius Turpis ET,Scelerisque (Canceled),Canceled,No
-"Mar. 23, 2026",Lorem 03,Fusce ID Dui Sit,"Tellus, 2025",Active,Yes
-"Aug. 3, 2026",Lorem 04,Tristique Neque Consequat ES,Sapien Varius Nunc,Active,Yes
-
+Date;Code/ID;Description Line 1;Description Line 2;Status;Clickable
+Feb. 17, 2025;Act 04;Voices of Leopoldplatz x Kiosk of Solidarity;Marketplace Leopoldplatz;Berlin, DE;Yes
+Jan. XX, 2026;Act 03;Voices of Postane;Postane, (Planning);Istanbul, TR;No
+Jan. XX, 2026;Act 02;Voices of Leopoldplatz;Playground Leopoldplatz;Berlin, DE;No
+Dec. 14, 2025;Act 01;Voices of Leopoldplatz;Playground Leopoldplatz;Berlin, DE;Yes
