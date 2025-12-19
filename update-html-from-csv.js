@@ -45,7 +45,7 @@ try {
     
     // Generate JavaScript data array
     const jsDataArray = data.map(item => {
-        return `            { "Date": ${JSON.stringify(item['Date'] || '')}, "Code/ID": ${JSON.stringify(item['Code/ID'] || '')}, "Description Line 1": ${JSON.stringify(item['Description Line 1'] || '')}, "Description Line 2": ${JSON.stringify(item['Description Line 2'] || '')}, "Status": ${JSON.stringify(item['Status'] || '')}, "Clickable": ${JSON.stringify(item['Clickable'] || 'No')} }`;
+        return `            { "Date": ${JSON.stringify(item['Date'] || '')}, "Location": ${JSON.stringify(item['Location'] || '')}, "Project Name Line 1": ${JSON.stringify(item['Project Name Line 1'] || '')}, "Project Name Line 2": ${JSON.stringify(item['Project Name Line 2'] || '')}, "Status": ${JSON.stringify(item['Status'] || '')}, "Clickable": ${JSON.stringify(item['Clickable'] || 'No')} }`;
     }).join(',\n');
     
     // Read HTML file

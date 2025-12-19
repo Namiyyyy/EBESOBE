@@ -35,9 +35,9 @@ try:
     for item in data:
         js_item = (
             f'            {{ "Date": {json.dumps(item.get("Date", ""))}, '
-            f'"Code/ID": {json.dumps(item.get("Code/ID", ""))}, '
-            f'"Description Line 1": {json.dumps(item.get("Description Line 1", ""))}, '
-            f'"Description Line 2": {json.dumps(item.get("Description Line 2", ""))}, '
+            f'"Location": {json.dumps(item.get("Location", ""))}, '
+            f'"Project Name Line 1": {json.dumps(item.get("Project Name Line 1", ""))}, '
+            f'"Project Name Line 2": {json.dumps(item.get("Project Name Line 2", ""))}, '
             f'"Status": {json.dumps(item.get("Status", ""))}, '
             f'"Clickable": {json.dumps(item.get("Clickable", "No"))} }}'
         )
