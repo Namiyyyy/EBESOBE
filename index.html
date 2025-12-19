@@ -609,61 +609,110 @@
         // Initialize page elements
         getPageElements();
 
-        function hideAllPages() {
-            if (landingPage) landingPage.style.display = 'none';
+        function hideAllPages(keepLandingVisible = false) {
             if (detailPage) detailPage.style.display = 'none';
             if (aboutPage) aboutPage.style.display = 'none';
             if (contactPage) contactPage.style.display = 'none';
+            if (!keepLandingVisible && landingPage) landingPage.style.display = 'none';
         }
 
         // Navigation functions - defined globally and refresh page elements
-        window.goHome = function() {
+        // Helper function to show a specific page
+        function showPage(pageName) {
             getPageElements();
             hideAllPages();
-            const lp = document.getElementById('landing-page');
-            if (lp) {
-                lp.style.display = 'flex';
+            
+            let pageElement = null;
+            switch(pageName) {
+                case 'home':
+                case 'landing':
+                    pageElement = document.getElementById('landing-page');
+                    if (pageElement) pageElement.style.display = 'flex';
+                    break;
+                case 'detail':
+                case 'cv':
+                    pageElement = document.getElementById('detail-page');
+                    if (pageElement) {
+                        pageElement.style.display = 'block';
+                        setTimeout(function() {
+                            populateActTable();
+                        }, 10);
+                    }
+                    break;
+                case 'about':
+                    pageElement = document.getElementById('about-page');
+                    if (pageElement) pageElement.style.display = 'block';
+                    break;
+                case 'contact':
+                    pageElement = document.getElementById('contact-page');
+                    if (pageElement) pageElement.style.display = 'block';
+                    break;
             }
+        }
+
+        // Navigation functions with browser history support
+        window.goHome = function() {
+            showPage('home');
+            history.pushState({page: 'home'}, 'Home', '/');
         };
 
         window.closeDetails = function() {
-            getPageElements();
-            hideAllPages();
-            const lp = document.getElementById('landing-page');
-            if (lp) {
-                lp.style.display = 'flex';
-            }
+            showPage('home');
+            history.pushState({page: 'home'}, 'Home', '/');
         };
 
         window.openDetails = function(dateId) {
-            getPageElements();
-            hideAllPages();
-            const dp = document.getElementById('detail-page');
-            if (dp) {
-                dp.style.display = 'block';
-                setTimeout(function() {
-                    populateActTable();
-                }, 10);
-            }
+            showPage('detail');
+            history.pushState({page: 'detail'}, 'CV', '/cv');
         };
 
         window.openAbout = function() {
-            getPageElements();
-            hideAllPages();
-            const ap = document.getElementById('about-page');
-            if (ap) {
-                ap.style.display = 'block';
-            }
+            showPage('about');
+            history.pushState({page: 'about'}, 'About', '/about');
         };
 
         window.openContact = function() {
-            getPageElements();
-            hideAllPages();
-            const cp = document.getElementById('contact-page');
-            if (cp) {
-                cp.style.display = 'block';
-            }
+            showPage('contact');
+            history.pushState({page: 'contact'}, 'Contact', '/contact');
         };
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', function(event) {
+            const state = event.state;
+            if (state && state.page) {
+                showPage(state.page);
+            } else {
+                // Parse URL to determine page
+                const path = window.location.pathname;
+                if (path === '/about' || path.includes('about')) {
+                    showPage('about');
+                } else if (path === '/contact' || path.includes('contact')) {
+                    showPage('contact');
+                } else if (path === '/cv' || path.includes('cv') || path.includes('detail')) {
+                    showPage('detail');
+                } else {
+                    showPage('home');
+                }
+            }
+        });
+
+        // Initialize page based on URL on load
+        function initializePageFromURL() {
+            const path = window.location.pathname;
+            if (path === '/about' || path.includes('about')) {
+                showPage('about');
+                history.replaceState({page: 'about'}, 'About', '/about');
+            } else if (path === '/contact' || path.includes('contact')) {
+                showPage('contact');
+                history.replaceState({page: 'contact'}, 'Contact', '/contact');
+            } else if (path === '/cv' || path.includes('cv') || path.includes('detail')) {
+                showPage('detail');
+                history.replaceState({page: 'detail'}, 'CV', '/cv');
+            } else {
+                showPage('home');
+                history.replaceState({page: 'home'}, 'Home', '/');
+            }
+        }
 
         // Also add event listeners as backup
         document.addEventListener('DOMContentLoaded', function() {
@@ -697,11 +746,7 @@
         });
 
         // Make functions globally accessible
-        window.goHome = goHome;
-        window.openDetails = openDetails;
-        window.closeDetails = closeDetails;
-        window.openAbout = openAbout;
-        window.openContact = openContact;
+        // Functions are already defined on window above, no need to reassign
 
         // --- 2. Clock ---
         setInterval(() => {
@@ -1028,48 +1073,83 @@
             let folderName = dateKey;
             
             // Check for duplicate dates - use index in actListData
-            // First, get all items with the same base date
-            const sameDateActs = actListData.filter(item => {
-                const itemDateKey = convertDateToBaseFolderName(item['Date']);
-                return itemDateKey === dateKey;
-            });
-            
-            // If multiple acts have same date, add index
-            if (sameDateActs.length > 1) {
-                const index = sameDateActs.findIndex(item => 
-                    item['Date'] === date && 
-                    item['Location'] === actItem['Location']
-                );
-                if (index > 0) {
-                    folderName = `${dateKey}-${index + 1}`;
+            // Only check if actListData is defined and actItem is provided
+            if (typeof actListData !== 'undefined' && actListData && actItem) {
+                // First, get all items with the same base date (using base function to avoid recursion)
+                const sameDateActs = [];
+                for (let i = 0; i < actListData.length; i++) {
+                    const item = actListData[i];
+                    const itemDateKey = convertDateToBaseFolderName(item['Date'] || '');
+                    if (itemDateKey === dateKey) {
+                        sameDateActs.push({ item: item, index: i });
+                    }
+                }
+                
+                // If multiple acts have same date, add index
+                if (sameDateActs.length > 1) {
+                    const foundIndex = sameDateActs.findIndex(entry => 
+                        entry.item['Date'] === date && 
+                        entry.item['Location'] === actItem['Location']
+                    );
+                    if (foundIndex > 0) {
+                        folderName = `${dateKey}-${foundIndex + 1}`;
+                    }
                 }
             }
             
             return folderName;
         }
 
-        // Initialize: Ensure landing page is visible on load
-        window.addEventListener('DOMContentLoaded', function() {
-            hideAllPages();
-            if (landingPage) {
-                landingPage.style.display = 'flex';
+        // Initialize page from URL on load and set initial history state
+        function initializeApp() {
+            // Parse current URL to determine which page to show
+            // Handle both root paths and subdirectory paths (like GitHub Pages)
+            const path = window.location.pathname.toLowerCase();
+            const hash = window.location.hash.toLowerCase();
+            let initialPage = 'home';
+            let urlPath = window.location.pathname; // Keep original path for history
+            
+            // Check hash first (for anchor links)
+            if (hash.includes('about')) {
+                initialPage = 'about';
+                urlPath = urlPath.split('#')[0] || '/about';
+            } else if (hash.includes('contact')) {
+                initialPage = 'contact';
+                urlPath = urlPath.split('#')[0] || '/contact';
+            } else if (hash.includes('cv') || hash.includes('detail')) {
+                initialPage = 'detail';
+                urlPath = urlPath.split('#')[0] || '/cv';
             }
-        });
+            // Then check pathname
+            else if (path.includes('/about') || path.endsWith('about')) {
+                initialPage = 'about';
+                urlPath = urlPath.split('#')[0] || '/about';
+            } else if (path.includes('/contact') || path.endsWith('contact')) {
+                initialPage = 'contact';
+                urlPath = urlPath.split('#')[0] || '/contact';
+            } else if (path.includes('/cv') || path.includes('cv') || path.includes('detail')) {
+                initialPage = 'detail';
+                urlPath = urlPath.split('#')[0] || '/cv';
+            } else {
+                initialPage = 'home';
+                urlPath = urlPath.split('#')[0] || '/';
+            }
+            
+            console.log('Initializing app - path:', path, 'initialPage:', initialPage);
+            
+            // Show the correct page first (don't reset to home)
+            showPage(initialPage);
+            
+            // Then set the history state to match the current URL
+            // This allows back button to work even after refresh
+            history.replaceState({page: initialPage}, '', urlPath);
+        }
 
-        // Also initialize immediately if DOM is already loaded
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', function() {
-                hideAllPages();
-                if (landingPage) {
-                    landingPage.style.display = 'flex';
-                }
-            });
+            document.addEventListener('DOMContentLoaded', initializeApp);
         } else {
             // DOM already loaded
-            hideAllPages();
-            if (landingPage) {
-                landingPage.style.display = 'flex';
-            }
+            initializeApp();
         }
     </script>
 </body>
