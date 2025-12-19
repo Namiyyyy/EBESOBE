@@ -251,21 +251,59 @@
             padding-bottom: 20px;
         }
 
-        .back-btn {
+        .back-btn, .header-link {
             cursor: pointer;
             font-weight: bold;
+            text-decoration: none;
+            color: var(--text-color);
         }
-        .back-btn:hover { text-decoration: underline; }
+        .back-btn:hover, .header-link:hover { 
+            text-decoration: underline; 
+        }
+
+        /* --- PAGE 3: ABOUT PAGE --- */
+        #about-page {
+            display: none;
+            background-color: var(--main-yellow);
+            min-height: 100vh;
+            padding: 40px;
+            font-family: 'Helvetica Neue', sans-serif;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* --- PAGE 4: CONTACT PAGE --- */
+        #contact-page {
+            display: none;
+            background-color: var(--main-yellow);
+            min-height: 100vh;
+            padding: 40px;
+            font-family: 'Helvetica Neue', sans-serif;
+        }
+
+        .contact-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
         /* Grid Layout for Content */
         .content-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 40px;
-            height: calc(100vh - 150px);
+            height: calc(100vh - 200px);
+            overflow: hidden;
         }
 
         /* Left Column: Table */
+        .list-column {
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
         .list-table {
             width: 100%;
             border-collapse: collapse;
@@ -276,6 +314,10 @@
             padding-bottom: 20px;
             font-weight: normal;
             border-bottom: 1px solid black;
+            position: sticky;
+            top: 0;
+            background-color: var(--main-yellow);
+            z-index: 1;
         }
 
         .list-table td {
@@ -293,6 +335,8 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+            overflow-y: auto;
+            padding-right: 10px;
         }
 
         .work-header {
@@ -303,16 +347,28 @@
             margin-bottom: 10px;
         }
 
+        .work-image {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .work-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
         .placeholder-box {
             background-color: #f0f0f0; 
             width: 100%;
-            height: 400px;
+            min-height: 300px;
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #aaa;
             font-size: 0.8rem;
+            margin-bottom: 20px;
         }
 
         .cross {
@@ -366,8 +422,8 @@
             <h1 class="title">EBE SOBE<br>KOLLEKTIV</h1>
             
             <div class="subtitle-nav">
-                <a href="#">About</a>
-                <a href="#">CV</a>
+                <a href="#" onclick="openAbout(); return false;">About</a>
+                <a href="#" onclick="openDetails(); return false;">CV</a>
             </div>
 
             <ul class="act-list" id="act-list-container">
@@ -375,7 +431,7 @@
             </ul>
 
             <div class="card-footer">
-                <a href="#" class="btn">Contact</a>
+                <a href="#" class="btn" onclick="openContact(); return false;">Contact</a>
                 <a href="#" class="btn">IG</a>
             </div>
         </div>
@@ -392,55 +448,31 @@
     <!-- === DETAIL / ARCHIVE PAGE === -->
     <section id="detail-page">
         <div class="detail-header">
-            <div class="back-btn" onclick="closeDetails()">← EBE SOBE Demo</div>
-            <div>Information</div>
-            <div>Selected Work</div>
+            <div class="back-btn" onclick="closeDetails()">← HOME</div>
+            <div class="header-link" onclick="openAbout()">About</div>
+            <div class="header-link" onclick="openContact()">Contact</div>
         </div>
 
         <div class="content-grid">
             <div class="list-column">
-                <table class="list-table">
+                <table class="list-table" id="act-list-table">
                     <thead>
                         <tr>
-                            <th>Client</th>
-                            <th>Project</th>
-                            <th>Year</th>
+                            <th>Code</th>
+                            <th>Description Line</th>
+                            <th>Date</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr><td>SED_DO</td><td>Ref. R/XTR-082</td><td>2049</td></tr>
-                        <tr><td>SED_DO</td><td>R/PRT-017</td><td>2048</td></tr>
-                        <tr><td>SED_DO</td><td>Ref. R/CXX-500</td><td>2047</td></tr>
-                        <tr><td>SED_DO</td><td>Ref. R/ANV-310</td><td>2046</td></tr>
-                        <tr><td>SED_DO</td><td>Ref. R/FTH-053</td><td>2045</td></tr>
-                        <tr><td>SED_DO</td><td>R/HLT-904</td><td>2044</td></tr>
-                        <tr><td>SED_DO</td><td>X/BXN-014</td><td>2043</td></tr>
-                        <tr><td>SED_DO</td><td>Ref. X/QOR-809</td><td>2042</td></tr>
+                    <tbody id="act-table-body">
+                        <!-- Table will be populated by JavaScript from CSV data -->
                     </tbody>
                 </table>
             </div>
 
-            <div class="work-display">
-                <div class="work-header">
-                    <span>SED_DO</span>
-                    <span>Ref. R/XTR-082</span>
-                    <span>2049</span>
-                </div>
-                
-                <div class="placeholder-box">
-                    <div class="cross tl"></div><div class="cross tr"></div>
-                    <span>Cargo® Rectangular Placeholder</span>
-                    <div class="cross bl"></div><div class="cross br"></div>
-                </div>
-
-                <div class="work-header" style="margin-top: 20px;">
-                    <span>SED_DO</span>
-                    <span>Ref. R/XTR-082</span>
-                    <span>2049</span>
-                </div>
-
-                <div class="placeholder-box" style="height: 200px;">
-                    <div class="cross tl"></div><div class="cross tr"></div>
+            <div class="work-display" id="work-display">
+                <!-- Work images will be populated by JavaScript when act is selected -->
+                <div style="text-align: center; padding: 40px; color: #666;">
+                    Select an act from the list to view images
                 </div>
             </div>
         </div>
@@ -456,21 +488,52 @@
         // --- 1. Page Navigation ---
         const landingPage = document.getElementById('landing-page');
         const detailPage = document.getElementById('detail-page');
+        const aboutPage = document.getElementById('about-page');
+        const contactPage = document.getElementById('contact-page');
+
+        function hideAllPages() {
+            landingPage.style.display = 'none';
+            detailPage.style.display = 'none';
+            aboutPage.style.display = 'none';
+            contactPage.style.display = 'none';
+        }
+
+        function goHome() {
+            hideAllPages();
+            landingPage.style.display = 'flex';
+        }
 
         function openDetails(dateId) {
-            landingPage.style.display = 'none';
+            hideAllPages();
             detailPage.style.display = 'block';
+            populateActTable();
         }
 
         function closeDetails() {
-            detailPage.style.display = 'none';
+            hideAllPages();
             landingPage.style.display = 'flex';
+        }
+
+        function openAbout() {
+            hideAllPages();
+            aboutPage.style.display = 'block';
+        }
+
+        function openContact() {
+            hideAllPages();
+            contactPage.style.display = 'block';
         }
 
         // --- 2. Clock ---
         setInterval(() => {
             const now = new Date();
-            document.getElementById('current-time').innerText = now.toLocaleTimeString();
+            const timeStr = now.toLocaleTimeString();
+            const currentTimeEl = document.getElementById('current-time');
+            const aboutTimeEl = document.getElementById('about-time');
+            const contactTimeEl = document.getElementById('contact-time');
+            if (currentTimeEl) currentTimeEl.innerText = timeStr;
+            if (aboutTimeEl) aboutTimeEl.innerText = timeStr;
+            if (contactTimeEl) contactTimeEl.innerText = timeStr;
         }, 1000);
 
         // --- 3. Background Carousel Logic ---
@@ -646,6 +709,60 @@
         // Load act list data on page load
         if (actListContainer && actListData) {
             updateActList(actListData);
+        }
+
+        // --- 7. Populate Detail Page Table ---
+        function populateActTable() {
+            const tableBody = document.getElementById('act-table-body');
+            if (!tableBody || !actListData) return;
+
+            tableBody.innerHTML = '';
+            
+            actListData.forEach(function(item) {
+                const code = item['Code/ID'] || '';
+                const desc1 = item['Description Line 1'] || '';
+                const desc2 = item['Description Line 2'] || '';
+                const date = item['Date'] || '';
+                const description = desc1 + (desc2 ? ' ' + desc2 : '');
+                
+                const row = document.createElement('tr');
+                row.onclick = function() {
+                    showActImages(item);
+                };
+                
+                row.innerHTML = `
+                    <td>${code}</td>
+                    <td>${description}</td>
+                    <td>${date}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+        // --- 8. Show Act Images ---
+        function showActImages(actItem) {
+            const workDisplay = document.getElementById('work-display');
+            if (!workDisplay) return;
+
+            const code = actItem['Code/ID'] || '';
+            const desc1 = actItem['Description Line 1'] || '';
+            const desc2 = actItem['Description Line 2'] || '';
+            const date = actItem['Date'] || '';
+            
+            // For now, show placeholder. You can add actual images later
+            workDisplay.innerHTML = `
+                <div class="work-header">
+                    <span>${code}</span>
+                    <span>${desc1}</span>
+                    <span>${date}</span>
+                </div>
+                <div class="placeholder-box">
+                    <div class="cross tl"></div><div class="cross tr"></div>
+                    <span>Images for ${desc1}</span>
+                    <div class="cross bl"></div><div class="cross br"></div>
+                </div>
+            `;
         }
     </script>
 </body>
