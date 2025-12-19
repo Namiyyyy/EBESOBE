@@ -14,7 +14,7 @@
             --text-color: #1a1a1a;
             --border-color: #dcb600;
             --font-main: 'Leelawadee', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            --font-mono: 'Leelawadee', 'Courier New', Courier, monospace;
+            --font-mono: 'Leelawadee', 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
 
         * {
@@ -23,11 +23,23 @@
             padding: 0;
         }
 
+        html, body {
+            font-family: var(--font-main) !important;
+        }
+
         body {
-            font-family: var(--font-main);
             color: var(--text-color);
             overflow-x: hidden;
             background-color: black; /* Fallback color */
+        }
+
+        /* Force all elements to use the same font */
+        html, body, div, span, h1, h2, h3, h4, h5, h6, p, a, ul, li, ol, table, th, td, button, input, textarea, select, label, section, article, header, footer, nav {
+            font-family: var(--font-main) !important;
+        }
+
+        html, body, div, span, h1, h2, h3, h4, h5, h6, p, a, ul, li, table, th, td, button, input, textarea {
+            font-family: var(--font-main) !important;
         }
 
         /* --- PAGE 1: LANDING --- */
