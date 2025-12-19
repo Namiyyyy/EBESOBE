@@ -342,20 +342,20 @@
     <section id="landing-page">
         
         <!-- === BACKGROUND CAROUSEL === -->
-        <!-- Images from the 'background images' folder -->
+        <!-- Images from the 'background-images' folder -->
         <div class="background-carousel">
-            <div class="slide active" data-img="1.png"></div>
-            <div class="slide" data-img="2.png"></div>
-            <div class="slide" data-img="2_2.png"></div>
-            <div class="slide" data-img="3.png"></div>
-            <div class="slide" data-img="4.png"></div>
-            <div class="slide" data-img="5.png"></div>
-            <div class="slide" data-img="6.png"></div>
-            <div class="slide" data-img="7.png"></div>
-            <div class="slide" data-img="8.png"></div>
-            <div class="slide" data-img="9.png"></div>
-            <div class="slide" data-img="10.png"></div>
-            <div class="slide" data-img="11.png"></div>
+            <div class="slide active" style="background-image: url('background-images/1.png');"></div>
+            <div class="slide" style="background-image: url('background-images/2.png');"></div>
+            <div class="slide" style="background-image: url('background-images/2-2.png');"></div>
+            <div class="slide" style="background-image: url('background-images/3.png');"></div>
+            <div class="slide" style="background-image: url('background-images/4.png');"></div>
+            <div class="slide" style="background-image: url('background-images/5.png');"></div>
+            <div class="slide" style="background-image: url('background-images/6.png');"></div>
+            <div class="slide" style="background-image: url('background-images/7.png');"></div>
+            <div class="slide" style="background-image: url('background-images/8.png');"></div>
+            <div class="slide" style="background-image: url('background-images/9.png');"></div>
+            <div class="slide" style="background-image: url('background-images/10.png');"></div>
+            <div class="slide" style="background-image: url('background-images/11.png');"></div>
         </div>
 
         <!-- Yellow Box -->
@@ -477,29 +477,29 @@
         let carouselInterval = null;
         let isPaused = false;
 
-        // Set background images with proper path handling
+        // Verify images are loading (images are already set via inline styles)
         slides.forEach((slide, index) => {
-            const imgName = slide.getAttribute('data-img');
-            if (imgName) {
-                // Path with new folder name (no spaces)
-                const path = `background-images/${imgName}`;
-                
-                const img = new Image();
-                
-                img.onload = function() {
-                    slide.style.backgroundImage = `url('${path}')`;
-                    console.log(`✅ Image ${index + 1} (${imgName}) loaded: ${path}`);
-                    // If this is the first active slide, make sure it's visible
-                    if (index === 0 && slide.classList.contains('active')) {
-                        slide.style.opacity = '1';
-                    }
-                };
-                
-                img.onerror = function() {
-                    console.error(`❌ Failed to load image ${index + 1}: ${path}`);
-                };
-                
-                img.src = path;
+            const bgImage = slide.style.backgroundImage;
+            if (bgImage) {
+                const urlMatch = bgImage.match(/url\(['"]?(.+?)['"]?\)/);
+                if (urlMatch) {
+                    const imgUrl = urlMatch[1];
+                    const img = new Image();
+                    
+                    img.onload = function() {
+                        console.log(`✅ Image ${index + 1} loaded: ${imgUrl}`);
+                        // Ensure first active slide is visible
+                        if (index === 0 && slide.classList.contains('active')) {
+                            slide.style.opacity = '1';
+                        }
+                    };
+                    
+                    img.onerror = function() {
+                        console.error(`❌ Failed to load image ${index + 1}: ${imgUrl}`);
+                    };
+                    
+                    img.src = imgUrl;
+                }
             }
         });
 
