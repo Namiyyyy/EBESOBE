@@ -184,7 +184,7 @@
             color: var(--main-yellow);
         }
 
-        /* Social Sidebar (Bottom Right) */
+        /* Carousel Navigation (Bottom Right) */
         .social-sidebar {
             position: absolute;
             bottom: 40px;
@@ -193,9 +193,10 @@
             padding: 10px;
             border-radius: 8px;
             display: flex;
-            flex-direction: column;
-            gap: 15px;
+            flex-direction: row;
+            gap: 10px;
             z-index: 10; /* Above carousel */
+            align-items: center;
         }
 
         .social-sidebar i {
@@ -208,13 +209,13 @@
 
         /* Carousel Navigation Buttons */
         .carousel-nav-btn {
-            width: 40px;
-            height: 40px;
+            width: 27px;
+            height: 27px;
             background-color: black;
             border: none;
             border-radius: 50%;
             color: var(--main-yellow);
-            font-size: 18px;
+            font-size: 12px;
             cursor: pointer;
             display: flex;
             align-items: center;
