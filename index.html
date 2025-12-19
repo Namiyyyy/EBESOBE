@@ -68,6 +68,12 @@
         .slide.active {
             opacity: 1;
             z-index: 2;
+            display: block;
+        }
+        
+        /* Ensure images are visible when loaded */
+        .slide[style*="background-image"] {
+            background-color: transparent;
         }
 
         /* The Yellow Card */
@@ -338,18 +344,18 @@
         <!-- === BACKGROUND CAROUSEL === -->
         <!-- Images from the 'background images' folder -->
         <div class="background-carousel">
-            <div class="slide active" style="background-image: url('background%20images/1.png');"></div>
-            <div class="slide" style="background-image: url('background%20images/2.png');"></div>
-            <div class="slide" style="background-image: url('background%20images/2_2.png');"></div>
-            <div class="slide" style="background-image: url('background%20images/3.png');"></div>
-            <div class="slide" style="background-image: url('background%20images/4.png');"></div>
-            <div class="slide" style="background-image: url('background%20images/5.png');"></div>
-            <div class="slide" style="background-image: url('background%20images/6.png');"></div>
-            <div class="slide" style="background-image: url('background%20images/7.png');"></div>
-            <div class="slide" style="background-image: url('background%20images/8.png');"></div>
-            <div class="slide" style="background-image: url('background%20images/9.png');"></div>
-            <div class="slide" style="background-image: url('background%20images/10.png');"></div>
-            <div class="slide" style="background-image: url('background%20images/11.png');"></div>
+            <div class="slide active" data-img="1.png"></div>
+            <div class="slide" data-img="2.png"></div>
+            <div class="slide" data-img="2_2.png"></div>
+            <div class="slide" data-img="3.png"></div>
+            <div class="slide" data-img="4.png"></div>
+            <div class="slide" data-img="5.png"></div>
+            <div class="slide" data-img="6.png"></div>
+            <div class="slide" data-img="7.png"></div>
+            <div class="slide" data-img="8.png"></div>
+            <div class="slide" data-img="9.png"></div>
+            <div class="slide" data-img="10.png"></div>
+            <div class="slide" data-img="11.png"></div>
         </div>
 
         <!-- Yellow Box -->
@@ -471,48 +477,41 @@
         let carouselInterval = null;
         let isPaused = false;
 
-        // Verify and fix image loading
+        // Set background images with proper path handling
         slides.forEach((slide, index) => {
-            const bgImage = slide.style.backgroundImage;
-            if (bgImage) {
-                const urlMatch = bgImage.match(/url\(['"]?(.+?)['"]?\)/);
-                if (urlMatch) {
-                    let imgUrl = urlMatch[1];
-                    const img = new Image();
-                    
-                    img.onload = function() {
-                        console.log(`Image ${index + 1} loaded: ${imgUrl}`);
-                    };
-                    
-                    img.onerror = function() {
-                        console.error(`Failed to load image ${index + 1}: ${imgUrl}`);
-                        // Try alternative paths
-                        const altPaths = [
-                            imgUrl.replace(/%20/g, ' '),  // Without encoding
-                            imgUrl.replace(/background%20images/, 'background images'),  // Mixed
-                            imgUrl.replace(/ /g, '%20')  // With encoding
-                        ];
+            const imgName = slide.getAttribute('data-img');
+            if (imgName) {
+                // Try multiple path formats to handle folder name with spaces
+                const paths = [
+                    `background images/${imgName}`,
+                    `background%20images/${imgName}`,
+                    encodeURI(`background images/${imgName}`)
+                ];
+                
+                let pathIndex = 0;
+                const tryLoadImage = () => {
+                    if (pathIndex < paths.length) {
+                        const path = paths[pathIndex];
+                        const img = new Image();
                         
-                        let tried = 0;
-                        const tryNext = () => {
-                            if (tried < altPaths.length) {
-                                slide.style.backgroundImage = `url('${altPaths[tried]}')`;
-                                const testImg = new Image();
-                                testImg.onload = () => {
-                                    console.log(`Image ${index + 1} loaded with alternative path: ${altPaths[tried]}`);
-                                };
-                                testImg.onerror = () => {
-                                    tried++;
-                                    tryNext();
-                                };
-                                testImg.src = altPaths[tried];
-                            }
+                        img.onload = function() {
+                            slide.style.backgroundImage = `url('${path}')`;
+                            console.log(`Image ${index + 1} loaded: ${path}`);
                         };
-                        tryNext();
-                    };
-                    
-                    img.src = imgUrl;
-                }
+                        
+                        img.onerror = function() {
+                            console.warn(`Failed to load image ${index + 1} with path: ${path}`);
+                            pathIndex++;
+                            tryLoadImage();
+                        };
+                        
+                        img.src = path;
+                    } else {
+                        console.error(`All paths failed for image ${index + 1}: ${imgName}`);
+                    }
+                };
+                
+                tryLoadImage();
             }
         });
 
