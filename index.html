@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EBE SOBE Kollektiv</title>
-    <!-- SheetJS library for Excel file reading -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         /* --- RESET & VARIABLES --- */
         :root {
@@ -324,47 +322,47 @@
             </div>
 
             <ul class="act-list" id="act-list-container">
-                <li class="act-item" onclick="openDetails('Mar. 15, 2026')">
+                <li class="act-item" onclick="openDetails('Feb. 17, 2025')">
                     <div class="act-header">
-                        <span>Mar. 15, 2026</span>
-                        <span>Lorem 01</span>
+                        <span>Feb. 17, 2025</span>
+                        <span>Act 04</span>
                     </div>
                     <div class="act-desc">
-                        Urban Act: Berlin Alexanderplatz<br>
-                        Eiusmod Tempor, 2025
+                        Voices of Leopoldplatz x Kiosk of Solidarity<br>
+                        Marketplace Leopoldplatz
                     </div>
                 </li>
 
-                <li class="act-item strike">
+                <li class="act-item">
                     <div class="act-header">
-                        <span>Mar. 22, 2026</span>
-                        <span>Lorem 02</span>
+                        <span>Jan. XX, 2026</span>
+                        <span>Act 03</span>
                     </div>
                     <div class="act-desc">
-                        Nullam Varius, Turpis ET<br>
-                        Scelerisque (Canceled)
+                        Voices of Postane<br>
+                        Postane, (Planning)
                     </div>
                 </li>
 
-                <li class="act-item" onclick="openDetails('Mar. 23, 2026')">
+                <li class="act-item">
                     <div class="act-header">
-                        <span>Mar. 23, 2026</span>
-                        <span>Lorem 03</span>
+                        <span>Jan. XX, 2026</span>
+                        <span>Act 02</span>
                     </div>
                     <div class="act-desc">
-                        Fusce ID Dui, Sit<br>
-                        Tellus, 2025
+                        Voices of Leopoldplatz<br>
+                        Playground Leopoldplatz
                     </div>
                 </li>
 
-                <li class="act-item" onclick="openDetails('Aug. 3, 2026')">
+                <li class="act-item" onclick="openDetails('Dec. 14, 2025')">
                     <div class="act-header">
-                        <span>Aug. 3, 2026</span>
-                        <span>Lorem 04</span>
+                        <span>Dec. 14, 2025</span>
+                        <span>Act 01</span>
                     </div>
                     <div class="act-desc">
-                        Tristique Neque Consequat, ES<br>
-                        Sapien Varius Nunc
+                        Voices of Leopoldplatz<br>
+                        Playground Leopoldplatz
                     </div>
                 </li>
             </ul>
@@ -372,12 +370,6 @@
             <div class="card-footer">
                 <a href="#" class="btn">Contact</a>
                 <a href="#" class="btn">IG</a>
-            </div>
-            
-            <!-- Excel Upload (for admin use) -->
-            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border-color);">
-                <input type="file" id="excel-upload" accept=".xlsx,.xls,.csv" style="display: none;">
-                <label for="excel-upload" class="btn" style="cursor: pointer; display: block; text-align: center;">Upload Act List (Excel)</label>
             </div>
         </div>
 
@@ -494,104 +486,21 @@
         // Start the automated slideshow
         setInterval(nextSlide, slideInterval);
 
-        // --- 4. Load CSV on page load and Excel Upload ---
-        // Function to load CSV file
-        async function loadCSVFile() {
-            try {
-                const response = await fetch('act-list-template.csv');
-                // Ensure UTF-8 encoding
-                const text = await response.text(); // fetch automatically handles UTF-8
-                const lines = text.split('\n').filter(line => line.trim());
-                
-                if (lines.length === 0) return;
-                
-                // Detect delimiter (comma or semicolon)
-                const firstLine = lines[0];
-                const delimiter = firstLine.includes(';') ? ';' : ',';
-                
-                // Parse CSV (simple parser)
-                const headers = parseCSVLine(lines[0], delimiter).map(h => h.replace(/"/g, '').trim());
-                const data = [];
-                
-                for (let i = 1; i < lines.length; i++) {
-                    const values = parseCSVLine(lines[i], delimiter);
-                    if (values.length >= 5) { // At least 5 columns needed
-                        const item = {};
-                        headers.forEach((header, index) => {
-                            if (index < values.length) {
-                                item[header] = values[index].replace(/^"|"$/g, '').trim();
-                            }
-                        });
-                        data.push(item);
-                    }
-                }
-                
-                if (data.length > 0) {
-                    updateActList(data);
-                }
-            } catch (error) {
-                console.log('CSV file not found or error loading:', error);
-                // Keep default HTML if CSV can't be loaded
-            }
-        }
+        // --- 4. Act List Data (embedded from CSV) ---
+        // This data is automatically updated from act-list-template.csv
+        // To update: edit the CSV file, then run the update script or manually update this array
+        const actListData = [
+            { "Date": "Feb. 17, 2025", "Code/ID": "Act 04", "Description Line 1": "Voices of Leopoldplatz x Kiosk of Solidarity", "Description Line 2": "Marketplace Leopoldplatz", "Status": "Berlin, DE", "Clickable": "Yes" },
+            { "Date": "Jan. XX, 2026", "Code/ID": "Act 03", "Description Line 1": "Voices of Postane", "Description Line 2": "Postane, (Planning)", "Status": "Istanbul, TR", "Clickable": "No" },
+            { "Date": "Jan. XX, 2026", "Code/ID": "Act 02", "Description Line 1": "Voices of Leopoldplatz", "Description Line 2": "Playground Leopoldplatz", "Status": "Berlin, DE", "Clickable": "No" },
+            { "Date": "Dec. 14, 2025", "Code/ID": "Act 01", "Description Line 1": "Voices of Leopoldplatz", "Description Line 2": "Playground Leopoldplatz", "Status": "Berlin, DE", "Clickable": "Yes" }
+        ];
         
-        // Simple CSV line parser that handles quoted fields and custom delimiter
-        function parseCSVLine(line, delimiter = ',') {
-            const result = [];
-            let current = '';
-            let inQuotes = false;
-            
-            for (let i = 0; i < line.length; i++) {
-                const char = line[i];
-                if (char === '"') {
-                    inQuotes = !inQuotes;
-                } else if (char === delimiter && !inQuotes) {
-                    result.push(current);
-                    current = '';
-                } else {
-                    current += char;
-                }
-            }
-            result.push(current);
-            return result;
-        }
-        
-        // Load CSV on page load
-        loadCSVFile();
+        // Load act list data on page load
+        updateActList(actListData);
 
-        // --- 5. Excel Upload and Act List Update ---
-        const excelUpload = document.getElementById('excel-upload');
+        // --- 5. Act List Container Reference ---
         const actListContainer = document.getElementById('act-list-container');
-
-        excelUpload.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    
-                    // Get the first worksheet
-                    const firstSheetName = workbook.SheetNames[0];
-                    const worksheet = workbook.Sheets[firstSheetName];
-                    
-                    // Convert to JSON
-                    const jsonData = XLSX.utils.sheet_to_json(worksheet);
-                    
-                    // Update the act list
-                    updateActList(jsonData);
-                    
-                    alert('Act list updated successfully!');
-                } catch (error) {
-                    alert('Error reading Excel file: ' + error.message);
-                    console.error(error);
-                }
-            };
-            
-            reader.readAsArrayBuffer(file);
-        });
 
         function updateActList(data) {
             // Clear existing items
