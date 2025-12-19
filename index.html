@@ -483,6 +483,59 @@
         </div>
     </section>
 
+    <!-- === ABOUT PAGE === -->
+    <section id="about-page">
+        <div class="detail-header">
+            <div class="back-btn" onclick="goHome()">← HOME</div>
+            <div>About</div>
+            <div></div>
+        </div>
+        <div class="about-content">
+            <h2 style="margin-bottom: 30px; font-size: 2rem;">About EBE SOBE Kollektiv</h2>
+            <p style="line-height: 1.8; margin-bottom: 20px;">
+                EBE SOBE Kollektiv is a collective focused on urban interventions and community engagement through artistic practices.
+            </p>
+            <p style="line-height: 1.8; margin-bottom: 20px;">
+                Our work explores the intersection of public space, social interaction, and cultural expression.
+            </p>
+            <p style="line-height: 1.8;">
+                Through various acts and projects, we aim to create meaningful connections between people and their urban environments.
+            </p>
+        </div>
+        <div class="detail-footer">
+            <span id="about-time">14:05:22</span>
+            <span>IG, Email</span>
+        </div>
+    </section>
+
+    <!-- === CONTACT PAGE === -->
+    <section id="contact-page">
+        <div class="detail-header">
+            <div class="back-btn" onclick="goHome()">← HOME</div>
+            <div>Contact</div>
+            <div></div>
+        </div>
+        <div class="contact-content">
+            <h2 style="margin-bottom: 30px; font-size: 2rem;">Contact</h2>
+            <p style="line-height: 1.8; margin-bottom: 20px;">
+                Get in touch with EBE SOBE Kollektiv
+            </p>
+            <p style="line-height: 1.8; margin-bottom: 20px;">
+                <strong>Email:</strong> [Your email address]
+            </p>
+            <p style="line-height: 1.8; margin-bottom: 20px;">
+                <strong>Instagram:</strong> [Your Instagram handle]
+            </p>
+            <p style="line-height: 1.8;">
+                For collaborations, inquiries, or more information about our projects, please reach out through the channels above.
+            </p>
+        </div>
+        <div class="detail-footer">
+            <span id="contact-time">14:05:22</span>
+            <span>IG, Email</span>
+        </div>
+    </section>
+
     <!-- === JAVASCRIPT === -->
     <script>
         // --- 1. Page Navigation ---
@@ -492,10 +545,10 @@
         const contactPage = document.getElementById('contact-page');
 
         function hideAllPages() {
-            landingPage.style.display = 'none';
-            detailPage.style.display = 'none';
-            aboutPage.style.display = 'none';
-            contactPage.style.display = 'none';
+            if (landingPage) landingPage.style.display = 'none';
+            if (detailPage) detailPage.style.display = 'none';
+            if (aboutPage) aboutPage.style.display = 'none';
+            if (contactPage) contactPage.style.display = 'none';
         }
 
         function goHome() {
@@ -505,8 +558,13 @@
 
         function openDetails(dateId) {
             hideAllPages();
-            detailPage.style.display = 'block';
-            populateActTable();
+            if (detailPage) {
+                detailPage.style.display = 'block';
+                // Small delay to ensure DOM is ready
+                setTimeout(function() {
+                    populateActTable();
+                }, 10);
+            }
         }
 
         function closeDetails() {
@@ -714,7 +772,14 @@
         // --- 7. Populate Detail Page Table ---
         function populateActTable() {
             const tableBody = document.getElementById('act-table-body');
-            if (!tableBody || !actListData) return;
+            if (!tableBody) {
+                console.error('Table body not found');
+                return;
+            }
+            if (!actListData) {
+                console.error('Act list data not found');
+                return;
+            }
 
             tableBody.innerHTML = '';
             
@@ -726,6 +791,7 @@
                 const description = desc1 + (desc2 ? ' ' + desc2 : '');
                 
                 const row = document.createElement('tr');
+                row.style.cursor = 'pointer';
                 row.onclick = function() {
                     showActImages(item);
                 };
@@ -738,6 +804,13 @@
                 
                 tableBody.appendChild(row);
             });
+            
+            console.log(`Populated table with ${actListData.length} items`);
+        }
+
+        // Populate table immediately if detail page is visible (for testing)
+        if (detailPage && detailPage.style.display !== 'none') {
+            populateActTable();
         }
 
         // --- 8. Show Act Images ---
