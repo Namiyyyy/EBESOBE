@@ -381,6 +381,12 @@
             height: auto;
             display: block;
             border: 1px solid rgba(0,0,0,0.1);
+            object-fit: contain;
+            background-color: #f5f5f5;
+        }
+
+        .work-image.loaded {
+            display: block !important;
         }
 
         .work-header {
@@ -992,25 +998,27 @@
             const projectNameLine2 = actItem['Project Name Line 2'] || '';
             const date = actItem['Date'] || '';
             
-            // Convert date to folder name format (e.g., "Feb. 17, 2025" -> "2025-02-17")
+            // Convert date to folder name format (e.g., "Dec. 14, 2025" -> "2025-12-14")
             const folderName = convertDateToFolderName(date, actItem);
             const imageFolder = `act-images/${folderName}/`;
+            
+            console.log('Loading images from folder:', imageFolder, 'for date:', date);
             
             // Build HTML with image placeholders
             let imagesHTML = '';
             
-            // Try to load images (we'll check for common image names)
-            const imageExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+            // Try to load images - check for both .jpg and .jpeg
             const maxImages = 20; // Maximum number of images to try loading
             
             // Create image elements that will load if files exist
-            // Try both .jpg and .jpeg extensions
             for (let i = 1; i <= maxImages; i++) {
+                // Try .jpg first, then .jpeg as fallback
+                const imgSrc = `${imageFolder}${i}.jpg`;
                 imagesHTML += `
-                    <div class="work-image" style="display: none;" data-img="${imageFolder}${i}.jpg">
-                        <img src="${imageFolder}${i}.jpg" alt="${projectNameLine1} - Image ${i}" 
-                             onerror="this.onerror=null; this.src='${imageFolder}${i}.jpeg';" 
-                             onload="this.parentElement.style.display='block';">
+                    <div class="work-image" style="display: none;" data-img-index="${i}">
+                        <img src="${imgSrc}" alt="${projectNameLine1} - Image ${i}" 
+                             onerror="handleImageError(this, '${imageFolder}', ${i});" 
+                             onload="this.parentElement.style.display='block'; this.parentElement.classList.add('loaded');">
                     </div>
                 `;
             }
@@ -1029,14 +1037,30 @@
                 </div>
             `;
             
-            // Check if any images loaded after a short delay
+            // Check if any images loaded after a delay
             setTimeout(() => {
-                const visibleImages = workDisplay.querySelectorAll('.work-image[style*="block"]');
+                const visibleImages = workDisplay.querySelectorAll('.work-image.loaded, .work-image[style*="block"]');
                 const noImagesPlaceholder = document.getElementById('no-images-placeholder');
+                console.log('Found', visibleImages.length, 'loaded images');
                 if (visibleImages.length === 0 && noImagesPlaceholder) {
                     noImagesPlaceholder.style.display = 'flex';
+                } else if (visibleImages.length > 0 && noImagesPlaceholder) {
+                    noImagesPlaceholder.style.display = 'none';
                 }
-            }, 500);
+            }, 1000);
+        }
+
+        // Helper function to handle image loading errors
+        function handleImageError(img, folder, index) {
+            // Try .jpeg extension
+            if (img.src.endsWith('.jpg')) {
+                img.src = `${folder}${index}.jpeg`;
+                return;
+            }
+            // If .jpeg also fails, hide the image container
+            if (img.parentElement) {
+                img.parentElement.style.display = 'none';
+            }
         }
 
         // Helper function to convert CSV date to base folder name (without checking duplicates)
