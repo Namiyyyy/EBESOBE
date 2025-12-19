@@ -622,6 +622,21 @@
                 actListContainer.appendChild(li);
             });
         }
+
+        // --- 6. Act List Data (embedded from CSV) ---
+        // This data is automatically updated from act-list-template.csv
+        // To update: edit the CSV file, then run the update script or manually update this array
+        const actListData = [
+            { "Date": "Feb. 17, 2025", "Code/ID": "Berlin, DE", "Description Line 1": "Voices of Leopoldplatz x Kiosk of Solidarity", "Description Line 2": "Marketplace Leopoldplatz", "Status": "Active", "Clickable": "Yes" },
+            { "Date": "Jan. XX, 2026", "Code/ID": "Istanbul, TR", "Description Line 1": "Voices of Postane", "Description Line 2": "Postane, (Planning)", "Status": "Active", "Clickable": "No" },
+            { "Date": "Jan. XX, 2026", "Code/ID": "Berlin, DE", "Description Line 1": "Voices of Leopoldplatz", "Description Line 2": "Playground Leopoldplatz", "Status": "Active", "Clickable": "No" },
+            { "Date": "Dec. 14, 2025", "Code/ID": "Berlin, DE", "Description Line 1": "Voices of Leopoldplatz", "Description Line 2": "Playground Leopoldplatz", "Status": "Done", "Clickable": "Yes" }
+        ];
+        
+        // Load act list data on page load
+        if (actListContainer && actListData) {
+            updateActList(actListData);
+        }
     </script>
 </body>
 </html>
