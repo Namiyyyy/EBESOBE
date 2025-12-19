@@ -481,37 +481,25 @@
         slides.forEach((slide, index) => {
             const imgName = slide.getAttribute('data-img');
             if (imgName) {
-                // Try multiple path formats to handle folder name with spaces
-                const paths = [
-                    `background images/${imgName}`,
-                    `background%20images/${imgName}`,
-                    encodeURI(`background images/${imgName}`)
-                ];
+                // Path with new folder name (no spaces)
+                const path = `background-images/${imgName}`;
                 
-                let pathIndex = 0;
-                const tryLoadImage = () => {
-                    if (pathIndex < paths.length) {
-                        const path = paths[pathIndex];
-                        const img = new Image();
-                        
-                        img.onload = function() {
-                            slide.style.backgroundImage = `url('${path}')`;
-                            console.log(`Image ${index + 1} loaded: ${path}`);
-                        };
-                        
-                        img.onerror = function() {
-                            console.warn(`Failed to load image ${index + 1} with path: ${path}`);
-                            pathIndex++;
-                            tryLoadImage();
-                        };
-                        
-                        img.src = path;
-                    } else {
-                        console.error(`All paths failed for image ${index + 1}: ${imgName}`);
+                const img = new Image();
+                
+                img.onload = function() {
+                    slide.style.backgroundImage = `url('${path}')`;
+                    console.log(`✅ Image ${index + 1} (${imgName}) loaded: ${path}`);
+                    // If this is the first active slide, make sure it's visible
+                    if (index === 0 && slide.classList.contains('active')) {
+                        slide.style.opacity = '1';
                     }
                 };
                 
-                tryLoadImage();
+                img.onerror = function() {
+                    console.error(`❌ Failed to load image ${index + 1}: ${path}`);
+                };
+                
+                img.src = path;
             }
         });
 
