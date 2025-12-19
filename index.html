@@ -847,18 +847,9 @@
                     classString += ' strike';
                 }
                 
-                // Build onclick attribute
-                let onclickAttr = '';
-                if (clickable === 'yes' || clickable === '1' || clickable === 'true') {
-                    onclickAttr = `onclick="openDetails('${date}')"`;
-                }
-                
                 // Create the list item HTML
                 const li = document.createElement('li');
                 li.className = classString;
-                if (onclickAttr) {
-                    li.setAttribute('onclick', `openDetails('${date}')`);
-                }
                 
                 li.innerHTML = `
                     <div class="act-header">
@@ -870,6 +861,21 @@
                         ${projectNameLine2}
                     </div>
                 `;
+                
+                // Add click handler if clickable (after innerHTML to avoid overwriting)
+                if (clickable === 'yes' || clickable === '1' || clickable === 'true') {
+                    li.style.cursor = 'pointer';
+                    li.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Act clicked:', date);
+                        if (window.openDetails) {
+                            window.openDetails(date);
+                        } else {
+                            console.error('window.openDetails is not defined');
+                        }
+                    });
+                }
                 
                 actListContainer.appendChild(li);
             });
