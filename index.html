@@ -995,8 +995,8 @@
             }, 500);
         }
 
-        // Helper function to convert CSV date to folder name
-        function convertDateToFolderName(date, actItem) {
+        // Helper function to convert CSV date to base folder name (without checking duplicates)
+        function convertDateToBaseFolderName(date) {
             if (!date) return 'unknown';
             
             // Handle dates like "Feb. 17, 2025" -> "2025-02-17"
@@ -1013,32 +1013,39 @@
                 const month = monthMap[match[1]] || '01';
                 const day = match[2] === 'XX' ? 'XX' : match[2].padStart(2, '0');
                 const year = match[3];
-                
-                // Check for duplicate dates - use index in actListData
-                const dateKey = `${year}-${month}-${day}`;
-                let folderName = dateKey;
-                
-                // If multiple acts have same date, add index
-                const sameDateActs = actListData.filter(item => {
-                    const itemDate = convertDateToFolderName(item['Date'], item);
-                    return itemDate.startsWith(dateKey);
-                });
-                
-                if (sameDateActs.length > 1) {
-                    const index = sameDateActs.findIndex(item => 
-                        item['Date'] === date && 
-                        item['Location'] === actItem['Location']
-                    );
-                    if (index > 0) {
-                        folderName = `${dateKey}-${index + 1}`;
-                    }
-                }
-                
-                return folderName;
+                return `${year}-${month}-${day}`;
             }
             
             // Fallback: sanitize date string
             return date.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+        }
+
+        // Helper function to convert CSV date to folder name (with duplicate handling)
+        function convertDateToFolderName(date, actItem) {
+            if (!date) return 'unknown';
+            
+            const dateKey = convertDateToBaseFolderName(date);
+            let folderName = dateKey;
+            
+            // Check for duplicate dates - use index in actListData
+            // First, get all items with the same base date
+            const sameDateActs = actListData.filter(item => {
+                const itemDateKey = convertDateToBaseFolderName(item['Date']);
+                return itemDateKey === dateKey;
+            });
+            
+            // If multiple acts have same date, add index
+            if (sameDateActs.length > 1) {
+                const index = sameDateActs.findIndex(item => 
+                    item['Date'] === date && 
+                    item['Location'] === actItem['Location']
+                );
+                if (index > 0) {
+                    folderName = `${dateKey}-${index + 1}`;
+                }
+            }
+            
+            return folderName;
         }
 
         // Initialize: Ensure landing page is visible on load
