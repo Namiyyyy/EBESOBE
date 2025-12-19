@@ -48,6 +48,7 @@
             width: 100vw;
             height: 100vh;
             display: flex;
+            display: flex;
             align-items: flex-start;
             padding: 40px;
             overflow: hidden;
@@ -466,7 +467,7 @@
             
             <div class="subtitle-nav">
                 <a href="#" onclick="openAbout(); return false;">ABOUT</a>
-                <a href="#" onclick="openDetails(); return false;">CV</a>
+                <a href="#" onclick="openDetails(null); return false;">CV</a>
             </div>
 
             <ul class="act-list" id="act-list-container">
@@ -610,7 +611,9 @@
 
         function goHome() {
             hideAllPages();
-            landingPage.style.display = 'flex';
+            if (landingPage) {
+                landingPage.style.display = 'flex';
+            }
         }
 
         function openDetails(dateId) {
@@ -626,18 +629,74 @@
 
         function closeDetails() {
             hideAllPages();
-            landingPage.style.display = 'flex';
+            if (landingPage) {
+                landingPage.style.display = 'flex';
+            }
         }
 
         function openAbout() {
             hideAllPages();
-            aboutPage.style.display = 'block';
+            if (aboutPage) {
+                aboutPage.style.display = 'block';
+            }
         }
 
         function openContact() {
             hideAllPages();
-            contactPage.style.display = 'block';
+            if (contactPage) {
+                contactPage.style.display = 'block';
+            }
         }
+
+        // Make functions globally accessible and add error handling
+        window.goHome = function() {
+            try {
+                goHome();
+            } catch(e) {
+                console.error('Error in goHome:', e);
+                if (landingPage) landingPage.style.display = 'flex';
+            }
+        };
+
+        window.closeDetails = function() {
+            try {
+                closeDetails();
+            } catch(e) {
+                console.error('Error in closeDetails:', e);
+                if (landingPage) landingPage.style.display = 'flex';
+            }
+        };
+
+        window.openDetails = function(dateId) {
+            try {
+                openDetails(dateId);
+            } catch(e) {
+                console.error('Error in openDetails:', e);
+            }
+        };
+
+        window.openAbout = function() {
+            try {
+                openAbout();
+            } catch(e) {
+                console.error('Error in openAbout:', e);
+            }
+        };
+
+        window.openContact = function() {
+            try {
+                openContact();
+            } catch(e) {
+                console.error('Error in openContact:', e);
+            }
+        };
+
+        // Make functions globally accessible
+        window.goHome = goHome;
+        window.openDetails = openDetails;
+        window.closeDetails = closeDetails;
+        window.openAbout = openAbout;
+        window.openContact = openContact;
 
         // --- 2. Clock ---
         setInterval(() => {
@@ -969,6 +1028,30 @@
             
             // Fallback: sanitize date string
             return date.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+        }
+
+        // Initialize: Ensure landing page is visible on load
+        window.addEventListener('DOMContentLoaded', function() {
+            hideAllPages();
+            if (landingPage) {
+                landingPage.style.display = 'flex';
+            }
+        });
+
+        // Also initialize immediately if DOM is already loaded
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                hideAllPages();
+                if (landingPage) {
+                    landingPage.style.display = 'flex';
+                }
+            });
+        } else {
+            // DOM already loaded
+            hideAllPages();
+            if (landingPage) {
+                landingPage.style.display = 'flex';
+            }
         }
     </script>
 </body>
