@@ -381,6 +381,8 @@
             height: auto;
             display: block;
             border: 1px solid rgba(0,0,0,0.1);
+            object-fit: contain;
+            background-color: #f5f5f5;
         }
 
         .work-header {
@@ -389,17 +391,6 @@
             border-bottom: 1px solid black;
             padding-bottom: 10px;
             margin-bottom: 10px;
-        }
-
-        .work-image {
-            width: 100%;
-            margin-bottom: 20px;
-        }
-
-        .work-image img {
-            width: 100%;
-            height: auto;
-            display: block;
         }
 
         .placeholder-box {
@@ -840,6 +831,12 @@
             isPaused = !isPaused;
             const pauseBtn = document.getElementById('pause-btn');
             
+            // Check if pause button exists before accessing its properties
+            if (!pauseBtn) {
+                console.error('Pause button element not found');
+                return;
+            }
+            
             if (isPaused) {
                 // Pause the carousel
                 if (carouselInterval) {
@@ -1007,10 +1004,10 @@
             // Try both .jpg and .jpeg extensions
             for (let i = 1; i <= maxImages; i++) {
                 imagesHTML += `
-                    <div class="work-image" style="display: none;" data-img="${imageFolder}${i}.jpg">
+                    <div class="work-image" style="display: none;" data-img-index="${i}">
                         <img src="${imageFolder}${i}.jpg" alt="${projectNameLine1} - Image ${i}" 
-                             onerror="this.onerror=null; this.src='${imageFolder}${i}.jpeg';" 
-                             onload="this.parentElement.style.display='block';">
+                             onerror="handleImageLoadError(this, '${imageFolder}', ${i});" 
+                             onload="handleImageLoadSuccess(this);">
                     </div>
                 `;
             }
@@ -1029,15 +1026,44 @@
                 </div>
             `;
             
-            // Check if any images loaded after a short delay
+            // Check if any images loaded after a delay
             setTimeout(() => {
                 const visibleImages = workDisplay.querySelectorAll('.work-image[style*="block"]');
                 const noImagesPlaceholder = document.getElementById('no-images-placeholder');
                 if (visibleImages.length === 0 && noImagesPlaceholder) {
                     noImagesPlaceholder.style.display = 'flex';
+                } else if (visibleImages.length > 0 && noImagesPlaceholder) {
+                    noImagesPlaceholder.style.display = 'none';
                 }
-            }, 500);
+            }, 1000);
         }
+
+        // Helper function to handle image load success - must be global for inline handlers
+        window.handleImageLoadSuccess = function(img) {
+            if (img && img.parentElement) {
+                img.parentElement.style.display = 'block';
+            }
+        };
+
+        // Helper function to handle image load errors - must be global for inline handlers
+        window.handleImageLoadError = function(img, folder, index) {
+            if (!img) return;
+            
+            // Try .jpeg extension if .jpg fails
+            if (img.src && img.src.endsWith('.jpg')) {
+                img.src = `${folder}${index}.jpeg`;
+                return;
+            }
+            // If .jpeg also fails, try .png
+            if (img.src && img.src.endsWith('.jpeg')) {
+                img.src = `${folder}${index}.png`;
+                return;
+            }
+            // If all fail, hide the image container
+            if (img.parentElement) {
+                img.parentElement.style.display = 'none';
+            }
+        };
 
         // Helper function to convert CSV date to base folder name (without checking duplicates)
         function convertDateToBaseFolderName(date) {
