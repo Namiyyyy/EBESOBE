@@ -62,6 +62,7 @@
             opacity: 0;
             transition: opacity 1.5s ease-in-out; /* Smooth fade effect */
             z-index: 1;
+            min-height: 100vh;
         }
 
         .slide.active {
@@ -337,18 +338,18 @@
         <!-- === BACKGROUND CAROUSEL === -->
         <!-- Images from the 'background images' folder -->
         <div class="background-carousel">
-            <div class="slide active" data-bg="background images/1.png"></div>
-            <div class="slide" data-bg="background images/2.png"></div>
-            <div class="slide" data-bg="background images/2_2.png"></div>
-            <div class="slide" data-bg="background images/3.png"></div>
-            <div class="slide" data-bg="background images/4.png"></div>
-            <div class="slide" data-bg="background images/5.png"></div>
-            <div class="slide" data-bg="background images/6.png"></div>
-            <div class="slide" data-bg="background images/7.png"></div>
-            <div class="slide" data-bg="background images/8.png"></div>
-            <div class="slide" data-bg="background images/9.png"></div>
-            <div class="slide" data-bg="background images/10.png"></div>
-            <div class="slide" data-bg="background images/11.png"></div>
+            <div class="slide active" style="background-image: url('background%20images/1.png');"></div>
+            <div class="slide" style="background-image: url('background%20images/2.png');"></div>
+            <div class="slide" style="background-image: url('background%20images/2_2.png');"></div>
+            <div class="slide" style="background-image: url('background%20images/3.png');"></div>
+            <div class="slide" style="background-image: url('background%20images/4.png');"></div>
+            <div class="slide" style="background-image: url('background%20images/5.png');"></div>
+            <div class="slide" style="background-image: url('background%20images/6.png');"></div>
+            <div class="slide" style="background-image: url('background%20images/7.png');"></div>
+            <div class="slide" style="background-image: url('background%20images/8.png');"></div>
+            <div class="slide" style="background-image: url('background%20images/9.png');"></div>
+            <div class="slide" style="background-image: url('background%20images/10.png');"></div>
+            <div class="slide" style="background-image: url('background%20images/11.png');"></div>
         </div>
 
         <!-- Yellow Box -->
@@ -361,49 +362,7 @@
             </div>
 
             <ul class="act-list" id="act-list-container">
-                <li class="act-item" onclick="openDetails('Feb. 17, 2025')">
-                    <div class="act-header">
-                        <span>Feb. 17, 2025</span>
-                        <span>Act 04</span>
-                    </div>
-                    <div class="act-desc">
-                        Voices of Leopoldplatz x Kiosk of Solidarity<br>
-                        Marketplace Leopoldplatz
-                    </div>
-                </li>
-
-                <li class="act-item">
-                    <div class="act-header">
-                        <span>Jan. XX, 2026</span>
-                        <span>Act 03</span>
-                    </div>
-                    <div class="act-desc">
-                        Voices of Postane<br>
-                        Postane, (Planning)
-                    </div>
-                </li>
-
-                <li class="act-item">
-                    <div class="act-header">
-                        <span>Jan. XX, 2026</span>
-                        <span>Act 02</span>
-                    </div>
-                    <div class="act-desc">
-                        Voices of Leopoldplatz<br>
-                        Playground Leopoldplatz
-                    </div>
-                </li>
-
-                <li class="act-item" onclick="openDetails('Dec. 14, 2025')">
-                    <div class="act-header">
-                        <span>Dec. 14, 2025</span>
-                        <span>Act 01</span>
-                    </div>
-                    <div class="act-desc">
-                        Voices of Leopoldplatz<br>
-                        Playground Leopoldplatz
-                    </div>
-                </li>
+                <!-- Act list will be populated by JavaScript from CSV data -->
             </ul>
 
             <div class="card-footer">
@@ -512,20 +471,48 @@
         let carouselInterval = null;
         let isPaused = false;
 
-        // Set background images from data attributes and verify loading
+        // Verify and fix image loading
         slides.forEach((slide, index) => {
-            const bgPath = slide.getAttribute('data-bg');
-            if (bgPath) {
-                slide.style.backgroundImage = `url('${bgPath}')`;
-                // Verify image loads
-                const img = new Image();
-                img.onload = function() {
-                    console.log(`Image ${index + 1} loaded successfully`);
-                };
-                img.onerror = function() {
-                    console.error(`Failed to load image ${index + 1}: ${bgPath}`);
-                };
-                img.src = bgPath;
+            const bgImage = slide.style.backgroundImage;
+            if (bgImage) {
+                const urlMatch = bgImage.match(/url\(['"]?(.+?)['"]?\)/);
+                if (urlMatch) {
+                    let imgUrl = urlMatch[1];
+                    const img = new Image();
+                    
+                    img.onload = function() {
+                        console.log(`Image ${index + 1} loaded: ${imgUrl}`);
+                    };
+                    
+                    img.onerror = function() {
+                        console.error(`Failed to load image ${index + 1}: ${imgUrl}`);
+                        // Try alternative paths
+                        const altPaths = [
+                            imgUrl.replace(/%20/g, ' '),  // Without encoding
+                            imgUrl.replace(/background%20images/, 'background images'),  // Mixed
+                            imgUrl.replace(/ /g, '%20')  // With encoding
+                        ];
+                        
+                        let tried = 0;
+                        const tryNext = () => {
+                            if (tried < altPaths.length) {
+                                slide.style.backgroundImage = `url('${altPaths[tried]}')`;
+                                const testImg = new Image();
+                                testImg.onload = () => {
+                                    console.log(`Image ${index + 1} loaded with alternative path: ${altPaths[tried]}`);
+                                };
+                                testImg.onerror = () => {
+                                    tried++;
+                                    tryNext();
+                                };
+                                testImg.src = altPaths[tried];
+                            }
+                        };
+                        tryNext();
+                    };
+                    
+                    img.src = imgUrl;
+                }
             }
         });
 
