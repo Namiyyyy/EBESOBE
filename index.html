@@ -48,7 +48,6 @@
             width: 100vw;
             height: 100vh;
             display: flex;
-            display: flex;
             align-items: flex-start;
             padding: 40px;
             overflow: hidden;
@@ -82,6 +81,7 @@
             min-height: 100vh;
         }
 
+
         .slide.active {
             opacity: 1 !important;
             z-index: 2;
@@ -110,6 +110,21 @@
             position: relative;
         }
 
+        /* Mobile: Yellow card full width, positioned over background */
+        @media (max-width: 768px) {
+            .card {
+                width: 100%;
+                max-width: 100%;
+                padding: 20px;
+                border-radius: 0;
+                box-shadow: none;
+                display: flex;
+                flex-direction: column;
+                position: relative;
+                z-index: 10;
+            }
+        }
+
         h1.title {
             font-size: 3.5rem;
             font-weight: 800;
@@ -117,6 +132,13 @@
             margin-bottom: 20px;
             letter-spacing: -2px;
             text-transform: uppercase;
+        }
+
+        @media (max-width: 768px) {
+            h1.title {
+                font-size: 2rem;
+                margin-bottom: 15px;
+            }
         }
 
         .subtitle-nav {
@@ -142,6 +164,8 @@
             list-style: none;
             font-family: var(--font-mono);
             font-size: 0.85rem;
+            flex: 1;
+            overflow-y: auto;
         }
 
         .act-item {
@@ -168,6 +192,16 @@
             line-height: 1.4;
         }
 
+        @media (max-width: 768px) {
+            .act-list {
+                font-size: 0.75rem;
+            }
+
+            .act-item {
+                padding: 10px 0;
+            }
+        }
+
         .strike {
             text-decoration: line-through;
             opacity: 0.5;
@@ -178,6 +212,7 @@
             display: flex;
             gap: 10px;
             margin-top: 30px;
+            flex-shrink: 0;
         }
 
         .btn {
@@ -198,6 +233,18 @@
         .btn:hover {
             background: black;
             color: var(--main-yellow);
+        }
+
+        @media (max-width: 768px) {
+            .card-footer {
+                margin-top: 15px;
+            }
+
+            .btn {
+                padding: 10px;
+                font-size: 0.75rem;
+                border-radius: 8px;
+            }
         }
 
         /* Carousel Navigation (Bottom Right) */
@@ -258,13 +305,34 @@
             font-family: var(--font-main);
         }
 
+        @media (max-width: 768px) {
+            #detail-page {
+                padding: 0;
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+        }
+
         .detail-header {
-            display: grid;
-            grid-template-columns: 1fr 1fr 2fr;
-            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
             font-size: 1.2rem;
             border-bottom: 1px solid black;
-            padding-bottom: 20px;
+            position: sticky;
+            top: 0;
+            background-color: var(--main-yellow);
+            z-index: 10;
+        }
+
+        .detail-header-left {
+            font-weight: bold;
+        }
+
+        .detail-header-right {
+            display: flex;
+            gap: 15px;
         }
 
         .back-btn, .header-link {
@@ -305,19 +373,41 @@
             margin: 0 auto;
         }
 
-        /* Grid Layout for Content */
+        /* Desktop: Two column layout */
         .content-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 40px;
             height: calc(100vh - 200px);
             overflow: hidden;
+            padding: 40px;
         }
 
-        /* Left Column: Table */
+        /* List Column - desktop */
         .list-column {
             overflow-y: auto;
             padding-right: 10px;
+        }
+
+        /* Mobile: Single column layout */
+        @media (max-width: 768px) {
+            .content-grid {
+                display: flex;
+                flex-direction: column;
+                padding: 20px;
+                gap: 30px;
+                height: auto;
+                overflow: visible;
+            }
+
+            .list-column {
+                width: 100%;
+                overflow: visible;
+            }
+
+            .work-display {
+                margin-top: 20px;
+            }
         }
 
         .list-table {
@@ -327,22 +417,20 @@
 
         .list-table th {
             text-align: left;
-            padding-bottom: 20px;
+            padding-bottom: 15px;
             font-weight: normal;
             border-bottom: 1px solid black;
-            position: sticky;
-            top: 0;
-            background-color: var(--main-yellow);
-            z-index: 1;
+            font-size: 0.9rem;
         }
 
         .list-table td {
-            padding: 15px 0;
+            padding: 20px 0;
             border-bottom: 1px solid rgba(0,0,0,0.2);
             cursor: pointer;
             vertical-align: top;
         }
 
+        /* Desktop: Three column table layout */
         .list-table th:nth-child(1),
         .list-table td:nth-child(1) {
             width: 20%;
@@ -357,18 +445,54 @@
         .list-table td:nth-child(3) {
             width: 20%;
         }
+
+        /* Mobile: Three-part layout for table rows */
+        @media (max-width: 768px) {
+            .list-table tr {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .list-table td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px 0;
+            }
+
+            .list-table td.location-cell {
+                font-weight: bold;
+            }
+
+            .list-table td.project-name-cell {
+                text-align: center;
+                padding: 5px 0;
+            }
+
+            .list-table td.date-cell {
+                text-align: right;
+            }
+        }
         
         .list-table tr:hover td {
             font-weight: bold;
         }
 
-        /* Right Column: Visual Work */
+        /* Work Display - desktop */
         .work-display {
             display: flex;
             flex-direction: column;
             gap: 20px;
             overflow-y: auto;
             padding-right: 10px;
+        }
+
+        .work-display-section-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border-bottom: 1px solid black;
+            padding-bottom: 10px;
         }
 
         .work-image {
@@ -388,9 +512,25 @@
         .work-header {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             border-bottom: 1px solid black;
-            padding-bottom: 10px;
-            margin-bottom: 10px;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .work-header .location-part {
+            font-weight: bold;
+        }
+
+        .work-header .project-part {
+            flex: 1;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        .work-header .date-part {
+            text-align: right;
         }
 
         .placeholder-box {
@@ -483,19 +623,22 @@
     <!-- === DETAIL / ARCHIVE PAGE === -->
     <section id="detail-page">
         <div class="detail-header">
-            <div class="back-btn" onclick="closeDetails()">← HOME</div>
-            <div class="header-link" onclick="openAbout()">ABOUT</div>
-            <div class="header-link" onclick="openContact()">CONTACT</div>
+            <div class="detail-header-left">
+                <span class="back-btn" onclick="closeDetails()">EBE SOBE Demo</span>
+            </div>
+            <div class="detail-header-right">
+                <span class="header-link" onclick="openAbout()">ABOUT</span>
+                <span class="header-link" onclick="openContact()">CONTACT</span>
+            </div>
         </div>
 
         <div class="content-grid">
             <div class="list-column">
+                <div class="work-display-section-title">Selected Work</div>
                 <table class="list-table" id="act-list-table">
                     <thead>
                         <tr>
-                            <th>Location</th>
-                            <th>Project Name</th>
-                            <th>Date</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody id="act-table-body">
@@ -506,16 +649,13 @@
 
             <div class="work-display" id="work-display">
                 <!-- Work images will be populated by JavaScript when act is selected -->
-                <div style="text-align: center; padding: 40px; color: #666;">
-                    Select an act from the list to view images
                 </div>
-            </div>
-        </div>
+                </div>
 
         <div class="detail-footer">
             <span id="current-time">14:05:22</span>
             <span>IG, Email</span>
-        </div>
+                </div>
     </section>
 
     <!-- === ABOUT PAGE === -->
@@ -524,7 +664,7 @@
             <div class="back-btn" onclick="goHome()">← HOME</div>
             <div>ABOUT</div>
             <div></div>
-        </div>
+                </div>
         <div class="about-content">
             <h2 style="margin-bottom: 30px; font-size: 2rem;">ABOUT</h2>
             <p style="line-height: 1.8; margin-bottom: 20px;">
@@ -550,7 +690,7 @@
             <p style="line-height: 1.8; margin-bottom: 20px;">
                 <strong>Web Design:</strong> Gülsen Namiduru
             </p>
-        </div>
+            </div>
         <div class="detail-footer">
             <span id="about-time">14:05:22</span>
             <span>IG, Email</span>
@@ -858,7 +998,7 @@
             if (carouselInterval) {
                 clearInterval(carouselInterval);
             }
-            // Start the automated slideshow
+        // Start the automated slideshow
             carouselInterval = setInterval(nextSlide, slideInterval);
         }
 
@@ -962,10 +1102,17 @@
                     showActImages(item);
                 };
                 
+                // Desktop: three columns, Mobile: single column with flex layout
                 row.innerHTML = `
-                    <td class="location-cell">${location}</td>
-                    <td class="project-name-cell">${projectNameLine1}${projectNameLine2 ? '<br>' + projectNameLine2 : ''}</td>
-                    <td>${date}</td>
+                    <td class="location-cell">
+                        <span class="location-part">${location}</span>
+                    </td>
+                    <td class="project-name-cell">
+                        <span class="project-part">${projectNameLine1}${projectNameLine2 ? '<br>' + projectNameLine2 : ''}</span>
+                    </td>
+                    <td class="date-cell">
+                        <span class="date-part">${date}</span>
+                    </td>
                 `;
                 
                 tableBody.appendChild(row);
@@ -1014,9 +1161,9 @@
             
             workDisplay.innerHTML = `
                 <div class="work-header">
-                    <span>${location}</span>
-                    <span>${projectNameLine1}</span>
-                    <span>${date}</span>
+                    <span class="location-part">${location}</span>
+                    <span class="project-part">${projectNameLine1}</span>
+                    <span class="date-part">${date}</span>
                 </div>
                 ${imagesHTML}
                 <div class="placeholder-box" id="no-images-placeholder" style="display: none;">
