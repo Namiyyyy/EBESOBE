@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EBE SOBE Kollektiv</title>
+    <title>ebe sobe kollektiv</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Leelawadee:wght@400;700&display=swap" rel="stylesheet">
@@ -17,6 +17,27 @@
             --font-mono: 'Leelawadee', 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
 
+        /* --- SELF-HOSTED MONATALIC FONT (for all-caps UI text) --- */
+        @font-face {
+            font-family: 'monatalic';
+            src: url('font/Monotalic-Regular.woff2') format('woff2'),
+                 url('font/Monotalic-Regular.woff') format('woff'),
+                 url('font/Monotalic-Regular.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'monatalic';
+            src: url('font/Monotalic-Bold.woff2') format('woff2'),
+                 url('font/Monotalic-Bold.woff') format('woff'),
+                 url('font/Monotalic-Bold.ttf') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -24,7 +45,7 @@
         }
 
         html, body {
-            font-family: var(--font-main) !important;
+            font-family: var(--font-main);
         }
 
         body {
@@ -33,24 +54,26 @@
             background-color: black; /* Fallback color */
         }
 
-        /* Force all elements to use the same font */
-        html, body, div, span, h1, h2, h3, h4, h5, h6, p, a, ul, li, ol, table, th, td, button, input, textarea, select, label, section, article, header, footer, nav {
-            font-family: var(--font-main) !important;
-        }
-
-        html, body, div, span, h1, h2, h3, h4, h5, h6, p, a, ul, li, table, th, td, button, input, textarea {
-            font-family: var(--font-main) !important;
+        /* Default body / text font (Leelawadee). More specific rules like
+           h1.title, .subtitle-nav, .back-btn, .header-link, .btn override this
+           to use 'monatalic' for all-caps UI labels. */
+        body, p, a, ul, li, ol, table, th, td, button, input, textarea, select, label, section, article, header, footer, nav {
+            font-family: var(--font-main);
         }
 
         /* --- PAGE 1: LANDING --- */
         #landing-page {
             position: relative;
             width: 100vw;
-            height: 100vh;
+            min-height: 100vh;
+            /* Allow the whole page to scroll when content is taller
+               than the viewport, instead of clipping it. */
+            height: auto;
             display: flex;
             align-items: flex-start;
             padding: 40px;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
         }
 
         /* --- CAROUSEL STYLES --- */
@@ -131,7 +154,9 @@
             line-height: 0.9;
             margin-bottom: 20px;
             letter-spacing: -2px;
-            text-transform: uppercase;
+            text-transform: none;
+            /* Use monatalic (lowercase family name) for main title */
+            font-family: 'monatalic', var(--font-main);
         }
 
         @media (max-width: 768px) {
@@ -142,11 +167,13 @@
         }
 
         .subtitle-nav {
-            font-family: var(--font-mono);
+            font-family: 'monatalic', var(--font-main);
             margin-bottom: 30px;
             font-size: 1rem;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 15px;
+            display: flex;
+            gap: 20px;
         }
 
         .subtitle-nav a {
@@ -155,6 +182,7 @@
             margin-right: 20px;
             font-weight: bold;
             cursor: pointer;
+            font-family: 'monatalic', var(--font-main);
         }
 
         .subtitle-nav a:hover { text-decoration: underline; }
@@ -222,8 +250,8 @@
             border: 1px solid var(--text-color);
             border-radius: 6px;
             text-align: center;
-            font-family: var(--font-mono);
-            text-transform: uppercase;
+            font-family: 'monatalic', var(--font-main);
+            text-transform: lowercase;
             font-size: 0.8rem;
             cursor: pointer;
             text-decoration: none;
@@ -326,6 +354,10 @@
             z-index: 10;
         }
 
+        .detail-header.about-header {
+            border-bottom: none;
+        }
+
         .detail-header-left {
             font-weight: bold;
         }
@@ -340,18 +372,36 @@
             font-weight: bold;
             text-decoration: none;
             color: var(--text-color);
+            /* Navigation labels use monatalic */
+            font-family: 'monatalic', var(--font-main);
         }
         .back-btn:hover, .header-link:hover { 
             text-decoration: underline; 
         }
 
-        /* --- PAGE 3: ABOUT PAGE --- */
+        /* --- PAGE 3: ABOUT PANEL (OVERLAY) --- */
         #about-page {
             display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 50vw;
+            max-width: 480px;
+            height: 100vh;
             background-color: var(--main-yellow);
-            min-height: 100vh;
-            padding: 40px;
             font-family: var(--font-main);
+            z-index: 20;
+            box-shadow: -4px 0 20px rgba(0,0,0,0.3);
+            display: none;
+            overflow-y: auto;
+            padding: 40px 30px;
+        }
+
+        @media (max-width: 768px) {
+            #about-page {
+                width: 100vw;
+                max-width: 100%;
+            }
         }
 
         .about-content {
@@ -462,6 +512,7 @@
 
             .list-table td.location-cell {
                 font-weight: bold;
+                font-family: 'monatalic', var(--font-main);
             }
 
             .list-table td.project-name-cell {
@@ -521,6 +572,7 @@
 
         .work-header .location-part {
             font-weight: bold;
+            font-family: 'monatalic', var(--font-main);
         }
 
         .work-header .project-part {
@@ -582,23 +634,20 @@
         <!-- === BACKGROUND CAROUSEL === -->
         <!-- Optimized images from the 'background-images/optimized' folder -->
         <div class="background-carousel">
-            <div class="slide active" style="background-image: url('background-images/optimized/1.jpg'); opacity: 1 !important;"></div>
-            <div class="slide" style="background-image: url('background-images/optimized/2-2.jpg');"></div>
-            <div class="slide" style="background-image: url('background-images/optimized/3.jpg');"></div>
-            <div class="slide" style="background-image: url('background-images/optimized/4.jpg');"></div>
-            <div class="slide" style="background-image: url('background-images/optimized/5.jpg');"></div>
-            <div class="slide" style="background-image: url('background-images/optimized/6.jpg');"></div>
-            <div class="slide" style="background-image: url('background-images/optimized/9.jpg');"></div>
-            <div class="slide" style="background-image: url('background-images/optimized/10.jpg');"></div>
+            <!-- Use all JPEG images currently in the optimized folder -->
+            <div class="slide active" style="background-image: url('background-images/optimized/4.jpg'); opacity: 1 !important;"></div>
+            <div class="slide" style="background-image: url('background-images/optimized/y1.jpg');"></div>
+            <div class="slide" style="background-image: url('background-images/optimized/y2.jpg');"></div>
+            <div class="slide" style="background-image: url('background-images/optimized/y3.jpg');"></div>
+            <div class="slide" style="background-image: url('background-images/optimized/y4.jpg');"></div>
         </div>
 
         <!-- Yellow Box -->
         <div class="card">
-            <h1 class="title">EBE SOBE<br>KOLLEKTIV</h1>
+            <h1 class="title">ebe sobe<br>kollektiv</h1>
             
             <div class="subtitle-nav">
-                <a href="#" onclick="openAbout(); return false;">ABOUT</a>
-                <a href="#" onclick="openDetails(null); return false;">CV</a>
+                <a href="#" onclick="openAbout(); return false;">more on us</a>
             </div>
 
             <ul class="act-list" id="act-list-container">
@@ -606,8 +655,8 @@
             </ul>
 
             <div class="card-footer">
-                <a href="#" class="btn" onclick="openContact(); return false;">CONTACT</a>
-                <a href="https://www.instagram.com/ebe.sobe.kollektiv/" target="_blank" rel="noopener noreferrer" class="btn">IG</a>
+                <a href="mailto:ebe.sobe.kollektiv@gmail.com" class="btn">mail</a>
+                <a href="https://www.instagram.com/ebe.sobe.kollektiv/" target="_blank" rel="noopener noreferrer" class="btn">instagram</a>
             </div>
         </div>
 
@@ -624,11 +673,10 @@
     <section id="detail-page">
         <div class="detail-header">
             <div class="detail-header-left">
-                <span class="back-btn" onclick="closeDetails()">EBE SOBE Demo</span>
+                <span class="back-btn" onclick="closeDetails()">ebe sobe demo</span>
             </div>
             <div class="detail-header-right">
-                <span class="header-link" onclick="openAbout()">ABOUT</span>
-                <span class="header-link" onclick="openContact()">CONTACT</span>
+                <span class="header-link" onclick="openAbout()">more on us</span>
             </div>
         </div>
 
@@ -649,26 +697,20 @@
 
             <div class="work-display" id="work-display">
                 <!-- Work images will be populated by JavaScript when act is selected -->
-                </div>
-                </div>
-
-        <div class="detail-footer">
-            <span id="current-time">14:05:22</span>
-            <span>IG, Email</span>
-                </div>
+            </div>
+        </div>
     </section>
 
-    <!-- === ABOUT PAGE === -->
+    <!-- === ABOUT PANEL (OVERLAY) === -->
     <section id="about-page">
-        <div class="detail-header">
-            <div class="back-btn" onclick="goHome()">← HOME</div>
-            <div>ABOUT</div>
+        <div class="detail-header about-header">
+            <div class="back-btn" onclick="closeAboutPanel()">×</div>
             <div></div>
-                </div>
+        </div>
         <div class="about-content">
-            <h2 style="margin-bottom: 30px; font-size: 2rem;">ABOUT</h2>
+            <h2 style="margin-bottom: 30px; font-size: 2rem; font-family: 'monatalic', var(--font-main);">more on us</h2>
             <p style="line-height: 1.8; margin-bottom: 20px;">
-                EBE SOBE Kollektiv is a collective for urban phenomenological experimentation. Through workshops and participarty practices, it creates a sensory index of urban space.
+                <span style="font-family: 'monatalic', var(--font-main);">ebe sobe kollektiv</span> is a collective for urban phenomenological experimentation. Through workshops and participarty practices, it creates a sensory index of urban space.
             </p>
             <p style="line-height: 1.8; margin-bottom: 20px;">
                 At this phase of the project we focus on playgrounds, and our target group is children between 8-12. As we grow, we would like to test our practice on other architectural typologies of play.
@@ -677,7 +719,7 @@
                 We are looking for venues we can recreate our format, make more workshops and reach more children. If you have a venue, or an event format that we can collaborate, please don't hesitate to <a href="#" onclick="openContact(); return false;" style="text-decoration: underline; color: var(--text-color);">reach us</a>!
             </p>
             <p style="line-height: 1.8; margin-bottom: 20px; margin-top: 30px;">
-                <strong>Collective Members:</strong><br>
+                <strong><span style="font-family: 'monatalic', var(--font-main);">Collective Members:</span></strong><br>
                 Nina Abba<br>
                 Uzay Dogan<br>
                 Gülsen Namiduru<br>
@@ -685,29 +727,25 @@
                 Sophia Wind
             </p>
             <p style="line-height: 1.8; margin-bottom: 20px;">
-                <strong>Logo and Brand Design:</strong> <a href="https://www.instagram.com/scelebillus/" target="_blank" rel="noopener noreferrer" style="text-decoration: underline; color: var(--text-color);">Sena Celebi</a>
+                <strong><span style="font-family: 'monatalic', var(--font-main);">Logo and Brand Design:</span></strong> <a href="https://www.instagram.com/scelebillus/" target="_blank" rel="noopener noreferrer" style="text-decoration: underline; color: var(--text-color);">Sena Celebi</a>
             </p>
             <p style="line-height: 1.8; margin-bottom: 20px;">
-                <strong>Web Design:</strong> Gülsen Namiduru
+                <strong><span style="font-family: 'monatalic', var(--font-main);">Web Design:</span></strong> Gülsen Namiduru
             </p>
             </div>
-        <div class="detail-footer">
-            <span id="about-time">14:05:22</span>
-            <span>IG, Email</span>
-        </div>
     </section>
 
     <!-- === CONTACT PAGE === -->
     <section id="contact-page">
         <div class="detail-header">
-            <div class="back-btn" onclick="goHome()">← HOME</div>
-            <div>CONTACT</div>
+            <div class="back-btn" onclick="goHome()">← home</div>
+            <div>contact</div>
             <div></div>
         </div>
         <div class="contact-content">
-            <h2 style="margin-bottom: 30px; font-size: 2rem;">CONTACT</h2>
+            <h2 style="margin-bottom: 30px; font-size: 2rem;">contact</h2>
             <p style="line-height: 1.8; margin-bottom: 20px;">
-                Get in touch with EBE SOBE Kollektiv
+                Get in touch with <span style="font-family: 'monatalic', var(--font-main);">ebe sobe kollektiv</span>
             </p>
             <p style="line-height: 1.8; margin-bottom: 20px;">
                 <strong>Email:</strong> [Your email address]
@@ -718,10 +756,6 @@
             <p style="line-height: 1.8;">
                 For collaborations, inquiries, or more information about our projects, please reach out through the channels above.
             </p>
-        </div>
-        <div class="detail-footer">
-            <span id="contact-time">14:05:22</span>
-            <span>IG, Email</span>
         </div>
     </section>
 
@@ -798,13 +832,24 @@
         };
 
         window.openAbout = function() {
-            showPage('about');
-            history.pushState({page: 'about'}, 'About', '/about');
+            // Show about overlay without leaving the current page
+            const aboutPanel = document.getElementById('about-page');
+            if (aboutPanel) {
+                aboutPanel.style.display = 'block';
+            }
+        };
+
+        window.closeAboutPanel = function() {
+            // Hide about overlay
+            const aboutPanel = document.getElementById('about-page');
+            if (aboutPanel) {
+                aboutPanel.style.display = 'none';
+            }
         };
 
         window.openContact = function() {
-            showPage('contact');
-            history.pushState({page: 'contact'}, 'Contact', '/contact');
+            // Contact via mailto instead of separate page
+            window.location.href = 'mailto:ebe.sobe.kollektiv@gmail.com';
         };
 
         // Handle browser back/forward buttons
@@ -813,13 +858,8 @@
             if (state && state.page) {
                 showPage(state.page);
             } else {
-                // Parse URL to determine page
                 const path = window.location.pathname;
-                if (path === '/about' || path.includes('about')) {
-                    showPage('about');
-                } else if (path === '/contact' || path.includes('contact')) {
-                    showPage('contact');
-                } else if (path === '/cv' || path.includes('cv') || path.includes('detail')) {
+                if (path.includes('detail')) {
                     showPage('detail');
                 } else {
                     showPage('home');
@@ -1155,8 +1195,8 @@
             if (posterFolder) {
                 mainHTML += `
                 <div class="work-image">
-                    <a href="${posterFolder}1.pdf" target="_blank" style="display:inline-block; padding: 10px 12px; border: 1px solid black; border-radius: 6px; font-family: var(--font-mono); font-size: 0.8rem; text-transform: uppercase; text-decoration: none; color: black; background-color: var(--main-yellow); margin-top: 10px;">
-                        Open poster (PDF)
+                    <a href="${posterFolder}1.pdf" target="_blank" style="display:inline-block; padding: 10px 12px; border: 1px solid black; border-radius: 6px; font-family: 'monatalic', var(--font-main); font-size: 0.8rem; text-transform: lowercase; text-decoration: none; color: black; background-color: var(--main-yellow); margin-top: 10px;">
+                        open poster (pdf)
                     </a>
                 </div>
                 `;
@@ -1278,46 +1318,20 @@
 
         // Initialize page from URL on load and set initial history state
         function initializeApp() {
-            // Parse current URL to determine which page to show
-            // Handle both root paths and subdirectory paths (like GitHub Pages)
+            // We only have a single main landing view and a detail view.
+            // About is now an overlay and contact is mail-only, so we don't
+            // navigate to separate /about or /contact pages anymore.
             const path = window.location.pathname.toLowerCase();
-            const hash = window.location.hash.toLowerCase();
             let initialPage = 'home';
-            let urlPath = window.location.pathname; // Keep original path for history
-            
-            // Check hash first (for anchor links)
-            if (hash.includes('about')) {
-                initialPage = 'about';
-                urlPath = urlPath.split('#')[0] || '/about';
-            } else if (hash.includes('contact')) {
-                initialPage = 'contact';
-                urlPath = urlPath.split('#')[0] || '/contact';
-            } else if (hash.includes('cv') || hash.includes('detail')) {
+            let urlPath = window.location.pathname;
+
+            if (path.includes('detail')) {
                 initialPage = 'detail';
-                urlPath = urlPath.split('#')[0] || '/cv';
-            }
-            // Then check pathname
-            else if (path.includes('/about') || path.endsWith('about')) {
-                initialPage = 'about';
-                urlPath = urlPath.split('#')[0] || '/about';
-            } else if (path.includes('/contact') || path.endsWith('contact')) {
-                initialPage = 'contact';
-                urlPath = urlPath.split('#')[0] || '/contact';
-            } else if (path.includes('/cv') || path.includes('cv') || path.includes('detail')) {
-                initialPage = 'detail';
-                urlPath = urlPath.split('#')[0] || '/cv';
             } else {
                 initialPage = 'home';
-                urlPath = urlPath.split('#')[0] || '/';
             }
-            
-            console.log('Initializing app - path:', path, 'initialPage:', initialPage);
-            
-            // Show the correct page first (don't reset to home)
+
             showPage(initialPage);
-            
-            // Then set the history state to match the current URL
-            // This allows back button to work even after refresh
             history.replaceState({page: initialPage}, '', urlPath);
         }
 
