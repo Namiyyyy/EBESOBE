@@ -199,7 +199,7 @@
         .act-item {
             border-bottom: 1px solid var(--border-color);
             padding: 12px 0;
-            cursor: pointer;
+            /* cursor: pointer; DISABLED: Acts are not clickable for now */
             transition: background 0.2s;
         }
 
@@ -476,7 +476,7 @@
         .list-table td {
             padding: 20px 0;
             border-bottom: 1px solid rgba(0,0,0,0.2);
-            cursor: pointer;
+            /* cursor: pointer; DISABLED: Acts are not clickable for now */
             vertical-align: top;
         }
 
@@ -1055,19 +1055,20 @@
                 `;
                 
                 // Add click handler if clickable (after innerHTML to avoid overwriting)
-                if (clickable === 'yes' || clickable === '1' || clickable === 'true') {
-                    li.style.cursor = 'pointer';
-                    li.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log('Act clicked:', date);
-                        if (window.openDetails) {
-                            window.openDetails(date);
-                        } else {
-                            console.error('window.openDetails is not defined');
-                        }
-                    });
-                }
+                // DISABLED: Acts are not clickable for now
+                // if (clickable === 'yes' || clickable === '1' || clickable === 'true') {
+                //     li.style.cursor = 'pointer';
+                //     li.addEventListener('click', function(e) {
+                //         e.preventDefault();
+                //         e.stopPropagation();
+                //         console.log('Act clicked:', date);
+                //         if (window.openDetails) {
+                //             window.openDetails(date);
+                //         } else {
+                //             console.error('window.openDetails is not defined');
+                //         }
+                //     });
+                // }
                 
                 actListContainer.appendChild(li);
             });
@@ -1110,10 +1111,11 @@
                 const date = item['Date'] || '';
                 
                 const row = document.createElement('tr');
-                row.style.cursor = 'pointer';
-                row.onclick = function() {
-                    showActImages(item);
-                };
+                // DISABLED: Acts are not clickable for now
+                // row.style.cursor = 'pointer';
+                // row.onclick = function() {
+                //     showActImages(item);
+                // };
                 
                 // Desktop: three columns, Mobile: single column with flex layout
                 row.innerHTML = `
