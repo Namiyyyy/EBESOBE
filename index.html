@@ -1037,7 +1037,10 @@
         // This data is automatically updated from act-list-template.csv
         // To update: edit the CSV file, then run the update script or manually update this array
         const actListData = [
-            { "Date": "Feb. 17, 2025", "Location": "Berlin, DE", "Project Name Line 1": "Voices of Leopoldplatz x Kiosk of Solidarity", "Project Name Line 2": "Marketplace Leopoldplatz", "Status": "Active", "Clickable": "Yes" },
+            { "Date": "September 2026", "Location": "Cottbus, DE", "Project Name Line 1": "EBE SOBE x Lausitz Biennale (TBA)", "Project Name Line 2": "Commonig Cottbus", "Status": "Active", "Clickable": "No" },
+            { "Date": "August 2026", "Location": "Istanbul, TR", "Project Name Line 1": "EBE SOBE x Superpool (TBA)", "Project Name Line 2": "\u00dcsk\u00fcdar", "Status": "Active", "Clickable": "No" },
+            { "Date": "May 2026", "Location": "Istanbul, TR", "Project Name Line 1": "EBE SOBE x Superpool (TBA)", "Project Name Line 2": "\u00dcsk\u00fcdar", "Status": "Active", "Clickable": "No" },
+            { "Date": "Feb. 14, 2026", "Location": "Berlin, DE", "Project Name Line 1": "Voices of Leopoldplatz x Kiosk of Solidarity", "Project Name Line 2": "Marketplace Leopoldplatz", "Status": "Active", "Clickable": "Yes" },
             { "Date": "Dec. 14, 2025", "Location": "Berlin, DE", "Project Name Line 1": "Voices of Leopoldplatz", "Project Name Line 2": "Playground Leopoldplatz", "Status": "Done", "Clickable": "Yes" }
         ];
         
@@ -1106,9 +1109,13 @@
             const projectNameLine2 = actItem['Project Name Line 2'] || '';
             const date = actItem['Date'] || '';
             
-            // Convert date to folder name format (e.g., "Feb. 17, 2025" -> "2025-02-17")
+            // Determine folders for posters/images
+            const posterFolderName = getPosterFolderName(actItem);
+            const posterFolder = posterFolderName ? `posters/${posterFolderName}/` : null;
+            
+            // Fallback: act-images folder based on date (kept for compatibility)
             const folderName = convertDateToFolderName(date, actItem);
-            const imageFolder = `act-images/${folderName}/`;
+            const imageFolder = posterFolder || `act-images/${folderName}/`;
             
             // Build HTML with image placeholders
             let imagesHTML = '';
@@ -1129,7 +1136,8 @@
                 `;
             }
             
-            workDisplay.innerHTML = `
+            // Build main HTML (header + images + placeholder)
+            let mainHTML = `
                 <div class="work-header">
                     <span class="location-part">${location}</span>
                     <span class="project-part">${projectNameLine1}</span>
@@ -1142,6 +1150,19 @@
                     <div class="cross bl"></div><div class="cross br"></div>
                 </div>
             `;
+            
+            // If we have a posters folder, add a link to open the first PDF poster (if present)
+            if (posterFolder) {
+                mainHTML += `
+                <div class="work-image">
+                    <a href="${posterFolder}1.pdf" target="_blank" style="display:inline-block; padding: 10px 12px; border: 1px solid black; border-radius: 6px; font-family: var(--font-mono); font-size: 0.8rem; text-transform: uppercase; text-decoration: none; color: black; background-color: var(--main-yellow); margin-top: 10px;">
+                        Open poster (PDF)
+                    </a>
+                </div>
+                `;
+            }
+
+            workDisplay.innerHTML = mainHTML;
             
             // Check if any images loaded after a delay
             setTimeout(() => {
@@ -1240,6 +1261,19 @@
             }
             
             return folderName;
+        }
+
+        // Helper to build posters folder name based on date + location
+        function getPosterFolderName(actItem) {
+            if (!actItem) return null;
+            const dateKey = convertDateToBaseFolderName(actItem['Date'] || '');
+            if (!dateKey || dateKey === 'unknown') return null;
+            const location = (actItem['Location'] || '').trim();
+            if (!location) return dateKey;
+            const locSlug = location
+                .replace(/[^a-zA-Z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+            return `${dateKey}_${locSlug}`;
         }
 
         // Initialize page from URL on load and set initial history state

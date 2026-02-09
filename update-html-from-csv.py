@@ -53,8 +53,13 @@ try:
     pattern = r'const actListData = \[[\s\S]*?\];'
     new_data = f'const actListData = [\n{js_data_array}\n        ];'
     
+    # Use a function for the replacement so that backslashes in the
+    # replacement text (e.g. Unicode escapes like \\u00dc) are not
+    # interpreted specially by re.sub. This avoids errors like
+    # "bad escape \\u at position ..." when the CSV contains
+    # non‑ASCII characters.
     if re.search(pattern, html_content):
-        html_content = re.sub(pattern, new_data, html_content)
+        html_content = re.sub(pattern, lambda m: new_data, html_content)
         with open(html_path, 'w', encoding='utf-8') as f:
             f.write(html_content)
         print(f'✅ Successfully updated HTML with {len(data)} act items from CSV')
