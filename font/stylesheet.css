@@ -1,0 +1,156 @@
+@font-face {
+    font-family: 'Monotalic Narrow';
+    src: url('Monotalic-NarrowMedium.eot');
+    src: local('Monotalic Narrow Medium'), local('Monotalic-NarrowMedium'),
+        url('Monotalic-NarrowMedium.eot?#iefix') format('embedded-opentype'),
+        url('Monotalic-NarrowMedium.woff2') format('woff2'),
+        url('Monotalic-NarrowMedium.woff') format('woff'),
+        url('Monotalic-NarrowMedium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Monotalic Narrow';
+    src: url('Monotalic-NarrowLight.eot');
+    src: local('Monotalic Narrow Light'), local('Monotalic-NarrowLight'),
+        url('Monotalic-NarrowLight.eot?#iefix') format('embedded-opentype'),
+        url('Monotalic-NarrowLight.woff2') format('woff2'),
+        url('Monotalic-NarrowLight.woff') format('woff'),
+        url('Monotalic-NarrowLight.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Monotalic Narrow';
+    src: url('Monotalic-NarrowBold.eot');
+    src: local('Monotalic Narrow Bold'), local('Monotalic-NarrowBold'),
+        url('Monotalic-NarrowBold.eot?#iefix') format('embedded-opentype'),
+        url('Monotalic-NarrowBold.woff2') format('woff2'),
+        url('Monotalic-NarrowBold.woff') format('woff'),
+        url('Monotalic-NarrowBold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Monotalic Wide';
+    src: url('Monotalic-WideMedium.eot');
+    src: local('Monotalic Wide Medium'), local('Monotalic-WideMedium'),
+        url('Monotalic-WideMedium.eot?#iefix') format('embedded-opentype'),
+        url('Monotalic-WideMedium.woff2') format('woff2'),
+        url('Monotalic-WideMedium.woff') format('woff'),
+        url('Monotalic-WideMedium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Monotalic Wide';
+    src: url('Monotalic-WideBold.eot');
+    src: local('Monotalic Wide Bold'), local('Monotalic-WideBold'),
+        url('Monotalic-WideBold.eot?#iefix') format('embedded-opentype'),
+        url('Monotalic-WideBold.woff2') format('woff2'),
+        url('Monotalic-WideBold.woff') format('woff'),
+        url('Monotalic-WideBold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Monotalic Narrow';
+    src: url('Monotalic-Narrow.eot');
+    src: local('Monotalic Narrow'), local('Monotalic-Narrow'),
+        url('Monotalic-Narrow.eot?#iefix') format('embedded-opentype'),
+        url('Monotalic-Narrow.woff2') format('woff2'),
+        url('Monotalic-Narrow.woff') format('woff'),
+        url('Monotalic-Narrow.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Monotalic';
+    src: url('Monotalic-Regular.eot');
+    src: local('Monotalic Regular'), local('Monotalic-Regular'),
+        url('Monotalic-Regular.eot?#iefix') format('embedded-opentype'),
+        url('Monotalic-Regular.woff2') format('woff2'),
+        url('Monotalic-Regular.woff') format('woff'),
+        url('Monotalic-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Monotalic';
+    src: url('Monotalic-Bold.eot');
+    src: local('Monotalic Bold'), local('Monotalic-Bold'),
+        url('Monotalic-Bold.eot?#iefix') format('embedded-opentype'),
+        url('Monotalic-Bold.woff2') format('woff2'),
+        url('Monotalic-Bold.woff') format('woff'),
+        url('Monotalic-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Monotalic Wide';
+    src: url('Monotalic-WideLight.eot');
+    src: local('Monotalic Wide Light'), local('Monotalic-WideLight'),
+        url('Monotalic-WideLight.eot?#iefix') format('embedded-opentype'),
+        url('Monotalic-WideLight.woff2') format('woff2'),
+        url('Monotalic-WideLight.woff') format('woff'),
+        url('Monotalic-WideLight.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Monotalic Wide';
+    src: url('Monotalic-Wide.eot');
+    src: local('Monotalic Wide'), local('Monotalic-Wide'),
+        url('Monotalic-Wide.eot?#iefix') format('embedded-opentype'),
+        url('Monotalic-Wide.woff2') format('woff2'),
+        url('Monotalic-Wide.woff') format('woff'),
+        url('Monotalic-Wide.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Monotalic';
+    src: url('Monotalic-Light.eot');
+    src: local('Monotalic Light'), local('Monotalic-Light'),
+        url('Monotalic-Light.eot?#iefix') format('embedded-opentype'),
+        url('Monotalic-Light.woff2') format('woff2'),
+        url('Monotalic-Light.woff') format('woff'),
+        url('Monotalic-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Monotalic';
+    src: url('Monotalic-Medium.eot');
+    src: local('Monotalic Medium'), local('Monotalic-Medium'),
+        url('Monotalic-Medium.eot?#iefix') format('embedded-opentype'),
+        url('Monotalic-Medium.woff2') format('woff2'),
+        url('Monotalic-Medium.woff') format('woff'),
+        url('Monotalic-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+

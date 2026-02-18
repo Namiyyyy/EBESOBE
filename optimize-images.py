@@ -4,10 +4,13 @@ Image Optimization Script
 Converts and resizes background images for web use.
 
 Requirements: pip install Pillow
-Usage: python3 optimize-images.py
+Usage:
+  python3 optimize-images.py           - Process PNGs from background-images -> optimized
+  python3 optimize-images.py --optimize-existing  - Re-optimize images in optimized folder (reduces large files)
 """
 
 import os
+import tempfile
 from PIL import Image
 import sys
 
@@ -16,7 +19,7 @@ INPUT_FOLDER = "background-images"
 OUTPUT_FOLDER = "background-images/optimized"
 MAX_WIDTH = 1920  # Full HD width (good for most screens)
 MAX_HEIGHT = 1080  # Full HD height
-QUALITY = 85  # JPG quality (85 is good balance between size and quality)
+QUALITY = 82  # JPG quality (good balance, smaller files)
 FORMAT = "JPEG"  # Use JPEG for photos (smaller than PNG)
 
 def optimize_image(input_path, output_path):
@@ -64,6 +67,86 @@ def optimize_image(input_path, output_path):
     except Exception as e:
         print(f"  ❌ Error: {e}")
         return False
+
+
+def optimize_existing():
+    """Re-optimize images already in the optimized folder (reduces large file sizes)"""
+    if not os.path.exists(OUTPUT_FOLDER):
+        print(f"❌ Error: Folder '{OUTPUT_FOLDER}' not found!")
+        sys.exit(1)
+
+    extensions = ('.jpg', '.jpeg', '.png', '.webp')
+    files = [f for f in os.listdir(OUTPUT_FOLDER)
+             if f.lower().endswith(extensions) and not f.startswith('.')]
+
+    if not files:
+        print(f"❌ No image files found in '{OUTPUT_FOLDER}'")
+        sys.exit(1)
+
+    print(f"📸 Re-optimizing {len(files)} images in {OUTPUT_FOLDER}\n")
+
+    success_count = 0
+    total_orig_size = 0
+    total_new_size = 0
+
+    for filename in sorted(files):
+        input_path = os.path.join(OUTPUT_FOLDER, filename)
+        base, ext = os.path.splitext(filename)
+        output_filename = base + '.jpg'
+        output_path = os.path.join(OUTPUT_FOLDER, output_filename)
+        orig_size = os.path.getsize(input_path)
+        total_orig_size += orig_size
+
+        print(f"Processing: {filename} ({orig_size / 1024 / 1024:.1f}MB)")
+
+        try:
+            img = Image.open(input_path)
+            if img.mode in ('RGBA', 'LA', 'P'):
+                background = Image.new('RGB', img.size, (255, 255, 255))
+                if img.mode == 'P':
+                    img = img.convert('RGBA')
+                background.paste(img, mask=img.split()[-1] if img.mode == 'RGBA' else None)
+                img = background
+            elif img.mode != 'RGB':
+                img = img.convert('RGB')
+
+            orig_w, orig_h = img.size
+            ratio = min(MAX_WIDTH / orig_w, MAX_HEIGHT / orig_h)
+            if ratio < 1:
+                new_w = int(orig_w * ratio)
+                new_h = int(orig_h * ratio)
+                img = img.resize((new_w, new_h), Image.Resampling.LANCZOS)
+                print(f"  Resized: {orig_w}x{orig_h} → {new_w}x{new_h}")
+
+            fd, temp_path = tempfile.mkstemp(suffix='.jpg', dir=OUTPUT_FOLDER)
+            os.close(fd)
+            try:
+                img.save(temp_path, FORMAT, quality=QUALITY, optimize=True)
+                new_size = os.path.getsize(temp_path)
+                os.replace(temp_path, output_path)
+                if input_path != output_path and os.path.exists(input_path):
+                    os.remove(input_path)
+            except Exception:
+                if os.path.exists(temp_path):
+                    os.remove(temp_path)
+                raise
+
+            total_new_size += new_size
+            reduction = ((orig_size - new_size) / orig_size) * 100
+            print(f"  Size: {orig_size / 1024 / 1024:.1f}MB → {new_size / 1024 / 1024:.1f}MB ({reduction:.1f}% reduction)")
+            success_count += 1
+        except Exception as e:
+            print(f"  ❌ Error: {e}")
+        print()
+
+    if success_count > 0:
+        print("=" * 50)
+        print("📊 SUMMARY")
+        print("=" * 50)
+        print(f"✅ Optimized: {success_count}/{len(files)} images")
+        print(f"📦 Total: {total_orig_size / 1024 / 1024:.1f}MB → {total_new_size / 1024 / 1024:.1f}MB")
+        print(f"💾 Saved: {(total_orig_size - total_new_size) / 1024 / 1024:.1f}MB")
+
 
 def main():
     # Check if input folder exists
@@ -121,7 +204,10 @@ def main():
 
 if __name__ == "__main__":
     try:
-        main()
+        if "--optimize-existing" in sys.argv:
+            optimize_existing()
+        else:
+            main()
     except KeyboardInterrupt:
         print("\n\n⚠️  Cancelled by user")
         sys.exit(1)

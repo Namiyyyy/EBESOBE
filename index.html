@@ -7,22 +7,25 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Leelawadee:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Preload monatalic font for reliable loading -->
+    <link rel="preload" href="./font/Monotalic-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="./font/Monotalic-Bold.woff2" as="font" type="font/woff2" crossorigin>
     <style>
         /* --- RESET & VARIABLES --- */
         :root {
             --main-yellow: #FFD600; 
             --text-color: #1a1a1a;
             --border-color: #dcb600;
-            --font-main: 'Leelawadee', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            --font-mono: 'Leelawadee', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --font-main: 'Leelawadee', sans-serif;
+            --font-mono: 'Leelawadee', sans-serif;
         }
 
-        /* --- SELF-HOSTED MONATALIC FONT (for all-caps UI text) --- */
+        /* --- SELF-HOSTED MONATALIC FONT (for UI text) --- */
         @font-face {
             font-family: 'monatalic';
-            src: url('font/Monotalic-Regular.woff2') format('woff2'),
-                 url('font/Monotalic-Regular.woff') format('woff'),
-                 url('font/Monotalic-Regular.ttf') format('truetype');
+            src: url('./font/Monotalic-Regular.woff2') format('woff2'),
+                 url('./font/Monotalic-Regular.woff') format('woff'),
+                 url('./font/Monotalic-Regular.ttf') format('truetype');
             font-weight: 400;
             font-style: normal;
             font-display: swap;
@@ -30,9 +33,9 @@
 
         @font-face {
             font-family: 'monatalic';
-            src: url('font/Monotalic-Bold.woff2') format('woff2'),
-                 url('font/Monotalic-Bold.woff') format('woff'),
-                 url('font/Monotalic-Bold.ttf') format('truetype');
+            src: url('./font/Monotalic-Bold.woff2') format('woff2'),
+                 url('./font/Monotalic-Bold.woff') format('woff'),
+                 url('./font/Monotalic-Bold.ttf') format('truetype');
             font-weight: 700;
             font-style: normal;
             font-display: swap;
@@ -199,7 +202,7 @@
         .act-item {
             border-bottom: 1px solid var(--border-color);
             padding: 12px 0;
-            /* cursor: pointer; DISABLED: Acts are not clickable for now */
+            cursor: pointer;
             transition: background 0.2s;
         }
 
@@ -275,55 +278,6 @@
             }
         }
 
-        /* Carousel Navigation (Bottom Right) */
-        .social-sidebar {
-            position: absolute;
-            bottom: 40px;
-            right: 40px;
-            background: var(--main-yellow);
-            padding: 10px;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: row;
-            gap: 10px;
-            z-index: 10; /* Above carousel */
-            align-items: center;
-        }
-
-        .social-sidebar i {
-            width: 20px;
-            height: 20px;
-            background-color: black;
-            border-radius: 50%;
-            display: block;
-        }
-
-        /* Carousel Navigation Buttons */
-        .carousel-nav-btn {
-            width: 27px;
-            height: 27px;
-            background-color: black;
-            border: none;
-            border-radius: 50%;
-            color: var(--main-yellow);
-            font-size: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            font-weight: bold;
-        }
-
-        .carousel-nav-btn:hover {
-            background-color: rgba(0,0,0,0.8);
-            transform: scale(1.1);
-        }
-
-        .carousel-nav-btn:active {
-            transform: scale(0.95);
-        }
-
         /* --- PAGE 2: ARCHIVE / DETAILS --- */
         #detail-page {
             display: none; 
@@ -392,7 +346,6 @@
             font-family: var(--font-main);
             z-index: 20;
             box-shadow: -4px 0 20px rgba(0,0,0,0.3);
-            display: none;
             overflow-y: auto;
             padding: 40px 30px;
         }
@@ -476,7 +429,7 @@
         .list-table td {
             padding: 20px 0;
             border-bottom: 1px solid rgba(0,0,0,0.2);
-            /* cursor: pointer; DISABLED: Acts are not clickable for now */
+            cursor: pointer;
             vertical-align: top;
         }
 
@@ -660,13 +613,6 @@
             </div>
         </div>
 
-        <!-- Carousel Navigation -->
-        <div class="social-sidebar">
-            <button class="carousel-nav-btn" id="prev-btn" onclick="previousSlide()" title="Previous image">‹</button>
-            <button class="carousel-nav-btn" id="next-btn" onclick="nextSlide()" title="Next image">›</button>
-            <button class="carousel-nav-btn" id="pause-btn" onclick="togglePause()" title="Pause/Play">⏸</button>
-        </div>
-
     </section>
 
     <!-- === DETAIL / ARCHIVE PAGE === -->
@@ -686,7 +632,9 @@
                 <table class="list-table" id="act-list-table">
                     <thead>
                         <tr>
-                            <th></th>
+                            <th>Location</th>
+                            <th>Project Name</th>
+                            <th>Date</th>
                         </tr>
                     </thead>
                     <tbody id="act-table-body">
@@ -1055,20 +1003,19 @@
                 `;
                 
                 // Add click handler if clickable (after innerHTML to avoid overwriting)
-                // DISABLED: Acts are not clickable for now
-                // if (clickable === 'yes' || clickable === '1' || clickable === 'true') {
-                //     li.style.cursor = 'pointer';
-                //     li.addEventListener('click', function(e) {
-                //         e.preventDefault();
-                //         e.stopPropagation();
-                //         console.log('Act clicked:', date);
-                //         if (window.openDetails) {
-                //             window.openDetails(date);
-                //         } else {
-                //             console.error('window.openDetails is not defined');
-                //         }
-                //     });
-                // }
+                if (clickable === 'yes' || clickable === '1' || clickable === 'true') {
+                    li.style.cursor = 'pointer';
+                    li.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Act clicked:', date);
+                        if (window.openDetails) {
+                            window.openDetails(date);
+                        } else {
+                            console.error('window.openDetails is not defined');
+                        }
+                    });
+                }
                 
                 actListContainer.appendChild(li);
             });
@@ -1111,11 +1058,10 @@
                 const date = item['Date'] || '';
                 
                 const row = document.createElement('tr');
-                // DISABLED: Acts are not clickable for now
-                // row.style.cursor = 'pointer';
-                // row.onclick = function() {
-                //     showActImages(item);
-                // };
+                row.style.cursor = 'pointer';
+                row.onclick = function() {
+                    showActImages(item);
+                };
                 
                 // Desktop: three columns, Mobile: single column with flex layout
                 row.innerHTML = `
