@@ -691,7 +691,7 @@
         };
 
         window.openAbout = function() {
-            // Show about overlay without leaving the current page
+            closeDetails();
             const aboutPanel = document.getElementById('about-page');
             if (aboutPanel) {
                 aboutPanel.style.display = 'block';
