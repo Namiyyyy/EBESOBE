@@ -164,7 +164,7 @@
 
         .title-image {
             display: block;
-            width: min(360px, 100%);
+            width: min(320px, 100%);
             height: auto;
         }
 
@@ -175,7 +175,7 @@
             }
 
             .title-image {
-                width: min(210px, 100%);
+                width: min(190px, 100%);
             }
         }
 
@@ -291,20 +291,27 @@
             }
         }
 
-        /* --- PAGE 2: ARCHIVE / DETAILS --- */
+        /* --- PAGE 2: DETAIL POPUP (OVERLAY) --- */
         #detail-page {
-            display: none; 
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 50vw;
+            max-width: 600px;
+            height: 100vh;
             background-color: var(--main-yellow);
-            min-height: 100vh;
-            padding: 40px;
             font-family: var(--font-main);
+            z-index: 20;
+            box-shadow: -4px 0 20px rgba(0,0,0,0.3);
+            flex-direction: column;
+            overflow: hidden;
         }
 
         @media (max-width: 768px) {
             #detail-page {
-                padding: 0;
-                overflow-y: auto;
-                overflow-x: hidden;
+                width: 100vw;
+                max-width: 100%;
             }
         }
 
@@ -312,13 +319,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
+            padding: 20px 40px;
             font-size: 1.2rem;
             border-bottom: 1px solid black;
-            position: sticky;
-            top: 0;
             background-color: var(--main-yellow);
             z-index: 10;
+            flex-shrink: 0;
         }
 
         .detail-header.about-header {
@@ -375,6 +381,11 @@
             margin: 0 auto;
         }
 
+        .about-content [style*="'monatalic'"],
+        .about-content [style*="'Monotalic'"] {
+            font-weight: 700;
+        }
+
         /* --- PAGE 4: CONTACT PAGE --- */
         #contact-page {
             display: none;
@@ -389,141 +400,49 @@
             margin: 0 auto;
         }
 
-        /* Desktop: Two column layout */
-        .content-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            height: calc(100vh - 200px);
-            overflow: hidden;
-            padding: 40px;
-        }
-
-        /* List Column - desktop */
-        .list-column {
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-
-        /* Mobile: Single column layout */
-        @media (max-width: 768px) {
-            .content-grid {
-                display: flex;
-                flex-direction: column;
-                padding: 20px;
-                gap: 30px;
-                height: auto;
-                overflow: visible;
-            }
-
-            .list-column {
-                width: 100%;
-                overflow: visible;
-            }
-
-            .work-display {
-                margin-top: 20px;
-            }
-        }
-
-        .list-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .list-table th {
-            text-align: left;
-            padding-bottom: 15px;
-            font-weight: normal;
-            border-bottom: 1px solid black;
-            font-size: 0.9rem;
-        }
-
-        .list-table td {
-            padding: 20px 0;
-            border-bottom: 1px solid rgba(0,0,0,0.2);
-            cursor: pointer;
-            vertical-align: top;
-        }
-
-        /* Desktop: Three column table layout */
-        .list-table th:nth-child(1),
-        .list-table td:nth-child(1) {
-            width: 20%;
-        }
-
-        .list-table th:nth-child(2),
-        .list-table td:nth-child(2) {
-            width: 60%;
-        }
-
-        .list-table th:nth-child(3),
-        .list-table td:nth-child(3) {
-            width: 20%;
-        }
-
-        /* Mobile: Three-part layout for table rows */
-        @media (max-width: 768px) {
-            .list-table tr {
-                display: flex;
-                flex-direction: column;
-            }
-
-            .list-table td {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 10px 0;
-            }
-
-            .list-table td.location-cell {
-                font-weight: bold;
-                font-family: 'monatalic', var(--font-main);
-            }
-
-            .list-table td.project-name-cell {
-                text-align: center;
-                padding: 5px 0;
-            }
-
-            .list-table td.date-cell {
-                text-align: right;
-            }
-        }
         
-        .list-table tr:hover td {
-            font-weight: bold;
-        }
 
-        /* Work Display - desktop */
+        /* Work Display */
         .work-display {
             display: flex;
             flex-direction: column;
             gap: 20px;
             overflow-y: auto;
-            padding-right: 10px;
-        }
-
-        .work-display-section-title {
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-            border-bottom: 1px solid black;
-            padding-bottom: 10px;
+            padding: 30px;
+            flex: 1;
+            min-height: 0;
         }
 
         .work-image {
             width: 100%;
-            margin-bottom: 20px;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 0;
         }
 
         .work-image img {
-            width: 100%;
-            height: auto;
+            width: auto;
+            max-width: 100%;
+            max-height: calc(100vh - 180px);
             display: block;
-            border: 1px solid rgba(0,0,0,0.1);
             object-fit: contain;
-            background-color: #f5f5f5;
+            margin: 0 auto;
+        }
+
+        .video-embed {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border: 1px solid rgba(0,0,0,0.1);
+            background: #000;
+        }
+
+        .video-embed iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
         }
 
         .work-header {
@@ -637,34 +556,12 @@
     <!-- === DETAIL / ARCHIVE PAGE === -->
     <section id="detail-page">
         <div class="detail-header">
-            <div class="detail-header-left">
-                <span class="back-btn" onclick="closeDetails()">ebe sobe demo</span>
-            </div>
-            <div class="detail-header-right">
-                <span class="header-link" onclick="openAbout()">more on us</span>
-            </div>
+            <div class="back-btn" onclick="closeDetails()">×</div>
+            <div></div>
         </div>
 
-        <div class="content-grid">
-            <div class="list-column">
-                <div class="work-display-section-title">Selected Work</div>
-                <table class="list-table" id="act-list-table">
-                    <thead>
-                        <tr>
-                            <th>Location</th>
-                            <th>Project Name</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
-                    <tbody id="act-table-body">
-                        <!-- Table will be populated by JavaScript from CSV data -->
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="work-display" id="work-display">
-                <!-- Work images will be populated by JavaScript when act is selected -->
-            </div>
+        <div class="work-display" id="work-display">
+            <!-- Work images will be populated by JavaScript when act is selected -->
         </div>
     </section>
 
@@ -761,16 +658,6 @@
                     pageElement = document.getElementById('landing-page');
                     if (pageElement) pageElement.style.display = 'flex';
                     break;
-                case 'detail':
-                case 'cv':
-                    pageElement = document.getElementById('detail-page');
-                    if (pageElement) {
-                        pageElement.style.display = 'block';
-                        setTimeout(function() {
-                            populateActTable();
-                        }, 10);
-                    }
-                    break;
                 case 'about':
                     pageElement = document.getElementById('about-page');
                     if (pageElement) pageElement.style.display = 'block';
@@ -789,13 +676,18 @@
         };
 
         window.closeDetails = function() {
-            showPage('home');
-            history.pushState({page: 'home'}, 'Home', '/');
+            var detailPanel = document.getElementById('detail-page');
+            if (detailPanel) detailPanel.style.display = 'none';
         };
 
-        window.openDetails = function(dateId) {
-            showPage('detail');
-            history.pushState({page: 'detail'}, 'CV', '/cv');
+        window.openDetails = function(actItem) {
+            var detailPanel = document.getElementById('detail-page');
+            if (detailPanel) {
+                detailPanel.style.display = 'flex';
+                if (actItem && typeof actItem === 'object') {
+                    showActImages(actItem);
+                }
+            }
         };
 
         window.openAbout = function() {
@@ -825,13 +717,9 @@
             if (state && state.page) {
                 showPage(state.page);
             } else {
-                const path = window.location.pathname;
-                if (path.includes('detail')) {
-                    showPage('detail');
-                } else {
-                    showPage('home');
-                }
+                showPage('home');
             }
+            closeDetails();
         });
 
         // Initialize page based on URL on load
@@ -843,9 +731,6 @@
             } else if (path === '/contact' || path.includes('contact')) {
                 showPage('contact');
                 history.replaceState({page: 'contact'}, 'Contact', '/contact');
-            } else if (path === '/cv' || path.includes('cv') || path.includes('detail')) {
-                showPage('detail');
-                history.replaceState({page: 'detail'}, 'CV', '/cv');
             } else {
                 showPage('home');
                 history.replaceState({page: 'home'}, 'Home', '/');
@@ -997,7 +882,7 @@
                 const projectNameLine1 = item['Project Name Line 1'] || '';
                 const projectNameLine2 = item['Project Name Line 2'] || '';
                 const status = (item['Status'] || 'Active').toLowerCase();
-                const clickable = (item['Clickable'] || 'No').toLowerCase();
+                const formattedProjectNameLine1 = projectNameLine1.replace(/EBE SOBE/gi, '<strong>$&</strong>');
                 
                 // Build class string
                 // Check if status is "canceled", "done", or contains "cancel"/"done" (case insensitive)
@@ -1016,25 +901,20 @@
                         <span>${location}</span>
                     </div>
                     <div class="act-desc">
-                        ${projectNameLine1}<br>
+                        ${formattedProjectNameLine1}<br>
                         ${projectNameLine2}
                     </div>
                 `;
                 
-                // Add click handler if clickable (after innerHTML to avoid overwriting)
-                if (clickable === 'yes' || clickable === '1' || clickable === 'true') {
-                    li.style.cursor = 'pointer';
-                    li.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log('Act clicked:', date);
-                        if (window.openDetails) {
-                            window.openDetails(date);
-                        } else {
-                            console.error('window.openDetails is not defined');
-                        }
-                    });
-                }
+                li.style.cursor = 'pointer';
+                li.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Act clicked:', date);
+                    if (window.openDetails) {
+                        window.openDetails(item);
+                    }
+                });
                 
                 actListContainer.appendChild(li);
             });
@@ -1056,57 +936,7 @@
             updateActList(actListData);
         }
 
-        // --- 7. Populate Detail Page Table ---
-        function populateActTable() {
-            const tableBody = document.getElementById('act-table-body');
-            if (!tableBody) {
-                console.error('Table body not found');
-                return;
-            }
-            if (!actListData) {
-                console.error('Act list data not found');
-                return;
-            }
-
-            tableBody.innerHTML = '';
-            
-            actListData.forEach(function(item) {
-                const location = item['Location'] || '';
-                const projectNameLine1 = item['Project Name Line 1'] || '';
-                const projectNameLine2 = item['Project Name Line 2'] || '';
-                const date = item['Date'] || '';
-                
-                const row = document.createElement('tr');
-                row.style.cursor = 'pointer';
-                row.onclick = function() {
-                    showActImages(item);
-                };
-                
-                // Desktop: three columns, Mobile: single column with flex layout
-                row.innerHTML = `
-                    <td class="location-cell">
-                        <span class="location-part">${location}</span>
-                    </td>
-                    <td class="project-name-cell">
-                        <span class="project-part">${projectNameLine1}${projectNameLine2 ? '<br>' + projectNameLine2 : ''}</span>
-                    </td>
-                    <td class="date-cell">
-                        <span class="date-part">${date}</span>
-                    </td>
-                `;
-                
-                tableBody.appendChild(row);
-            });
-            
-            console.log(`Populated table with ${actListData.length} items`);
-        }
-
-        // Populate table immediately if detail page is visible (for testing)
-        if (detailPage && detailPage.style.display !== 'none') {
-            populateActTable();
-        }
-
-        // --- 8. Show Act Images ---
+        // --- 7. Show Act Images ---
         function showActImages(actItem) {
             const workDisplay = document.getElementById('work-display');
             if (!workDisplay) return;
@@ -1115,6 +945,7 @@
             const projectNameLine1 = actItem['Project Name Line 1'] || '';
             const projectNameLine2 = actItem['Project Name Line 2'] || '';
             const date = actItem['Date'] || '';
+            const videoUrl = getActVideoUrl(actItem);
             
             // Determine folders for posters/images
             const posterFolderName = getPosterFolderName(actItem);
@@ -1151,36 +982,25 @@
                     <span class="date-part">${date}</span>
                 </div>
                 ${imagesHTML}
-                <div class="placeholder-box" id="no-images-placeholder" style="display: none;">
-                    <div class="cross tl"></div><div class="cross tr"></div>
-                    <span>No images found for this act</span>
-                    <div class="cross bl"></div><div class="cross br"></div>
-                </div>
             `;
             
-            // If we have a posters folder, add a link to open the first PDF poster (if present)
-            if (posterFolder) {
+            // Embed video for acts that have an associated video link
+            if (videoUrl) {
                 mainHTML += `
                 <div class="work-image">
-                    <a href="${posterFolder}1.pdf" target="_blank" style="display:inline-block; padding: 10px 12px; border: 1px solid black; border-radius: 6px; font-family: 'monatalic', var(--font-main); font-size: 0.8rem; text-transform: lowercase; text-decoration: none; color: black; background-color: var(--main-yellow); margin-top: 10px;">
-                        open poster (pdf)
-                    </a>
+                    <div class="video-embed">
+                        <iframe
+                            src="${videoUrl}"
+                            title="Voices of Leopoldplatz video"
+                            allow="autoplay; fullscreen; picture-in-picture"
+                            allowfullscreen
+                        ></iframe>
+                    </div>
                 </div>
                 `;
             }
 
             workDisplay.innerHTML = mainHTML;
-            
-            // Check if any images loaded after a delay
-            setTimeout(() => {
-                const visibleImages = workDisplay.querySelectorAll('.work-image[style*="block"]');
-                const noImagesPlaceholder = document.getElementById('no-images-placeholder');
-                if (visibleImages.length === 0 && noImagesPlaceholder) {
-                    noImagesPlaceholder.style.display = 'flex';
-                } else if (visibleImages.length > 0 && noImagesPlaceholder) {
-                    noImagesPlaceholder.style.display = 'none';
-                }
-            }, 1000);
         }
 
         // Helper function to handle image load success - must be global for inline handlers
@@ -1283,6 +1103,17 @@
             return `${dateKey}_${locSlug}`;
         }
 
+        // Helper to map specific acts to video links
+        function getActVideoUrl(actItem) {
+            if (!actItem) return null;
+            const projectNameLine1 = (actItem['Project Name Line 1'] || '').toLowerCase();
+            const date = (actItem['Date'] || '').trim();
+            if (date === 'Feb. 14, 2026' && projectNameLine1.includes('voices of leopoldplatz')) {
+                return 'https://player.vimeo.com/video/1169706188';
+            }
+            return null;
+        }
+
         // Initialize page from URL on load and set initial history state
         function initializeApp() {
             // We only have a single main landing view and a detail view.
@@ -1292,11 +1123,7 @@
             let initialPage = 'home';
             let urlPath = window.location.pathname;
 
-            if (path.includes('detail')) {
-                initialPage = 'detail';
-            } else {
-                initialPage = 'home';
-            }
+            initialPage = 'home';
 
             showPage(initialPage);
             history.replaceState({page: initialPage}, '', urlPath);
