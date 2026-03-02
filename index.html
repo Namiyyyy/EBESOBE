@@ -153,19 +153,40 @@
 
         h1.title {
             font-size: 3.5rem;
-            font-weight: 800;
+            font-weight: 700;
             line-height: 0.9;
             margin-bottom: 20px;
             letter-spacing: -2px;
             text-transform: none;
-            /* Use monatalic (lowercase family name) for main title */
             font-family: 'monatalic', var(--font-main);
+        }
+
+        .title-image {
+            display: block;
+            width: min(440px, 100%);
+            height: auto;
+        }
+
+        .title-text-fallback {
+            display: none;
+        }
+
+        h1.title.use-text-fallback .title-image {
+            display: none;
+        }
+
+        h1.title.use-text-fallback .title-text-fallback {
+            display: inline;
         }
 
         @media (max-width: 768px) {
             h1.title {
                 font-size: 2rem;
                 margin-bottom: 15px;
+            }
+
+            .title-image {
+                width: min(240px, 100%);
             }
         }
 
@@ -597,7 +618,15 @@
 
         <!-- Yellow Box -->
         <div class="card">
-            <h1 class="title">ebe sobe<br>kollektiv</h1>
+            <h1 class="title" id="landing-title">
+                <img
+                    src="font/ebe-sobe-title.png"
+                    alt="ebe sobe kollektiv"
+                    class="title-image"
+                    onerror="document.getElementById('landing-title').classList.add('use-text-fallback')"
+                >
+                <span class="title-text-fallback">ebe sobe<br>kollektiv</span>
+            </h1>
             
             <div class="subtitle-nav">
                 <a href="#" onclick="openAbout(); return false;">more on us</a>
