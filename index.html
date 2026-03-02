@@ -10,6 +10,7 @@
     <!-- Preload monatalic font for reliable loading -->
     <link rel="preload" href="./font/Monotalic-Regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="./font/Monotalic-Bold.woff2" as="font" type="font/woff2" crossorigin>
+    <link href="./font/stylesheet.css" rel="stylesheet">
     <style>
         /* --- RESET & VARIABLES --- */
         :root {
@@ -158,25 +159,13 @@
             margin-bottom: 20px;
             letter-spacing: -2px;
             text-transform: none;
-            font-family: 'monatalic', var(--font-main);
+            font-family: 'Monotalic', 'monatalic', var(--font-main);
         }
 
         .title-image {
             display: block;
             width: min(440px, 100%);
             height: auto;
-        }
-
-        .title-text-fallback {
-            display: none;
-        }
-
-        h1.title.use-text-fallback .title-image {
-            display: none;
-        }
-
-        h1.title.use-text-fallback .title-text-fallback {
-            display: inline;
         }
 
         @media (max-width: 768px) {
@@ -191,7 +180,7 @@
         }
 
         .subtitle-nav {
-            font-family: 'monatalic', var(--font-main);
+            font-family: 'Monotalic', 'monatalic', var(--font-main);
             margin-bottom: 30px;
             font-size: 1rem;
             border-bottom: 1px solid var(--border-color);
@@ -206,7 +195,7 @@
             margin-right: 20px;
             font-weight: bold;
             cursor: pointer;
-            font-family: 'monatalic', var(--font-main);
+            font-family: 'Monotalic', 'monatalic', var(--font-main);
         }
 
         .subtitle-nav a:hover { text-decoration: underline; }
@@ -274,7 +263,7 @@
             border: 1px solid var(--text-color);
             border-radius: 6px;
             text-align: center;
-            font-family: 'monatalic', var(--font-main);
+            font-family: 'Monotalic', 'monatalic', var(--font-main);
             text-transform: lowercase;
             font-size: 0.8rem;
             cursor: pointer;
@@ -348,7 +337,7 @@
             text-decoration: none;
             color: var(--text-color);
             /* Navigation labels use monatalic */
-            font-family: 'monatalic', var(--font-main);
+            font-family: 'Monotalic', 'monatalic', var(--font-main);
         }
         .back-btn:hover, .header-link:hover { 
             text-decoration: underline; 
@@ -620,12 +609,10 @@
         <div class="card">
             <h1 class="title" id="landing-title">
                 <img
-                    src="font/ebe-sobe-title.png"
+                    src="./font/ebe-sobe-title.png?v=2"
                     alt="ebe sobe kollektiv"
                     class="title-image"
-                    onerror="document.getElementById('landing-title').classList.add('use-text-fallback')"
                 >
-                <span class="title-text-fallback">ebe sobe<br>kollektiv</span>
             </h1>
             
             <div class="subtitle-nav">
