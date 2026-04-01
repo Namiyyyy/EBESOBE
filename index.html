@@ -279,6 +279,53 @@
             color: var(--main-yellow);
         }
 
+        .newsletter-form {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-shrink: 0;
+        }
+
+        .newsletter-form input[type="email"] {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid var(--text-color);
+            border-radius: 6px;
+            background: transparent;
+            font-family: var(--font-main);
+            font-size: 0.75rem;
+            color: black;
+            outline: none;
+        }
+
+        .newsletter-form input[type="email"]::placeholder {
+            color: rgba(0,0,0,0.5);
+        }
+
+        .newsletter-form button {
+            padding: 10px 16px;
+            border: 1px solid var(--text-color);
+            border-radius: 6px;
+            background: transparent;
+            font-family: 'Monotalic', 'monatalic', var(--font-main);
+            font-weight: 700;
+            font-size: 0.75rem;
+            cursor: pointer;
+            color: black;
+            white-space: nowrap;
+        }
+
+        .newsletter-form button:hover {
+            background: black;
+            color: var(--main-yellow);
+        }
+
+        .newsletter-msg {
+            font-size: 0.7rem;
+            margin-top: 6px;
+            opacity: 0.8;
+        }
+
         @media (max-width: 768px) {
             .card-footer {
                 margin-top: 15px;
@@ -288,6 +335,11 @@
                 padding: 10px;
                 font-size: 0.75rem;
                 border-radius: 8px;
+            }
+
+            .newsletter-form input[type="email"],
+            .newsletter-form button {
+                font-size: 0.7rem;
             }
         }
 
@@ -439,7 +491,102 @@
             opacity: 0.8;
         }
 
-        /* --- PAGE 5: CONTACT PAGE --- */
+        /* --- PAGE 5: PROJECTS PANEL (OVERLAY) --- */
+        #projects-page {
+            display: none;
+            position: fixed;
+            top: 40px;
+            right: 40px;
+            bottom: 40px;
+            width: 450px;
+            max-width: calc(100vw - 80px);
+            background-color: var(--main-yellow);
+            font-family: var(--font-main);
+            font-size: 0.667rem;
+            z-index: 20;
+            border-radius: 12px;
+            overflow-y: auto;
+            padding: 30px;
+        }
+
+        @media (max-width: 768px) {
+            #projects-page {
+                top: 0;
+                right: 0;
+                bottom: 0;
+                width: 100vw;
+                max-width: 100%;
+                border-radius: 0;
+                padding: 20px;
+            }
+        }
+
+        .projects-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .book-preview {
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .book-preview-track {
+            display: flex;
+            transition: transform 0.4s ease;
+        }
+
+        .book-preview-track img {
+            width: 100%;
+            flex-shrink: 0;
+            display: block;
+            cursor: pointer;
+        }
+
+        .book-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        .book-nav button {
+            background: none;
+            border: 1px solid black;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-main);
+        }
+
+        .book-nav button:hover {
+            background: rgba(0,0,0,0.08);
+        }
+
+        .book-page-indicator {
+            font-family: 'monatalic', var(--font-main);
+            opacity: 0.7;
+        }
+
+        .project-description {
+            line-height: 1.8;
+            margin-top: 20px;
+            font-size: 1em;
+        }
+
+        .project-description p {
+            margin-bottom: 16px;
+        }
+
+        /* --- PAGE 6: CONTACT PAGE --- */
         #contact-page {
             display: none;
             background-color: var(--main-yellow);
@@ -458,23 +605,27 @@
         /* Custom scrollbar for popup panels */
         .work-display::-webkit-scrollbar,
         #about-page::-webkit-scrollbar,
-        #video-archive-page::-webkit-scrollbar {
+        #video-archive-page::-webkit-scrollbar,
+        #projects-page::-webkit-scrollbar {
             width: 6px;
         }
         .work-display::-webkit-scrollbar-track,
         #about-page::-webkit-scrollbar-track,
-        #video-archive-page::-webkit-scrollbar-track {
+        #video-archive-page::-webkit-scrollbar-track,
+        #projects-page::-webkit-scrollbar-track {
             background: var(--main-yellow);
         }
         .work-display::-webkit-scrollbar-thumb,
         #about-page::-webkit-scrollbar-thumb,
-        #video-archive-page::-webkit-scrollbar-thumb {
+        #video-archive-page::-webkit-scrollbar-thumb,
+        #projects-page::-webkit-scrollbar-thumb {
             background: black;
             border-radius: 3px;
         }
         .work-display,
         #about-page,
-        #video-archive-page {
+        #video-archive-page,
+        #projects-page {
             scrollbar-width: thin;
             scrollbar-color: black var(--main-yellow);
         }
@@ -637,6 +788,111 @@
             background: rgba(255,255,255,0.3);
         }
 
+        .book-fullscreen-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.95);
+            z-index: 9999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .book-fullscreen-overlay.active {
+            display: flex;
+        }
+
+        .book-spread {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            max-width: 92vw;
+            max-height: 82vh;
+        }
+
+        .book-spread img {
+            max-height: 80vh;
+            max-width: 45vw;
+            object-fit: contain;
+            display: block;
+        }
+
+        .book-spread img.single-page {
+            max-width: 50vw;
+        }
+
+        .book-fullscreen-nav {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .book-fullscreen-nav button {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            color: white;
+            font-size: 1.4rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .book-fullscreen-nav button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .book-fullscreen-indicator {
+            color: rgba(255,255,255,0.6);
+            font-family: 'monatalic', var(--font-main);
+            font-size: 0.9rem;
+        }
+
+        .book-fullscreen-close {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.15);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.4rem;
+            cursor: pointer;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .book-fullscreen-close:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .book-spread {
+                flex-direction: column;
+                gap: 2px;
+            }
+
+            .book-spread img,
+            .book-spread img.single-page {
+                max-width: 92vw;
+                max-height: 44vh;
+            }
+        }
+
         .work-header {
             display: flex;
             justify-content: space-between;
@@ -735,6 +991,7 @@
             
             <div class="subtitle-nav">
                 <a href="#" onclick="event.stopPropagation(); openAbout(); return false;">about</a>
+                <a href="#" onclick="event.stopPropagation(); openProjects(); return false;">projects</a>
                 <a href="#" onclick="event.stopPropagation(); openVideoArchive(); return false;">video archive</a>
             </div>
 
@@ -746,6 +1003,12 @@
                 <a href="mailto:ebe.sobe.kollektiv@gmail.com" class="btn">mail</a>
                 <a href="https://www.instagram.com/ebe.sobe.kollektiv/" target="_blank" rel="noopener noreferrer" class="btn">instagram</a>
             </div>
+
+            <form class="newsletter-form" id="newsletter-form" onsubmit="return handleNewsletterSubmit(event)">
+                <input type="email" name="email" placeholder="your email" required>
+                <button type="submit">subscribe</button>
+            </form>
+            <div class="newsletter-msg" id="newsletter-msg"></div>
         </div>
 
     </section>
@@ -806,6 +1069,20 @@
             <h2 style="margin-bottom: 30px; font-size: 2em; font-family: 'monatalic', var(--font-main);">video archive</h2>
             <div id="video-archive-list">
                 <!-- Videos will be populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- === PROJECTS PANEL (OVERLAY) === -->
+    <section id="projects-page">
+        <div class="detail-header about-header">
+            <div class="back-btn" onclick="closeProjects()">×</div>
+            <div></div>
+        </div>
+        <div class="projects-content">
+            <h2 style="margin-bottom: 30px; font-size: 2em; font-family: 'monatalic', var(--font-main);">projects</h2>
+            <div id="projects-book-container">
+                <!-- Book previews will be populated by JS -->
             </div>
         </div>
     </section>
@@ -894,6 +1171,7 @@
         window.openDetails = function(actItem) {
             closeAboutPanel();
             closeVideoArchive();
+            closeProjects();
             var detailPanel = document.getElementById('detail-page');
             if (detailPanel) {
                 detailPanel.style.display = 'flex';
@@ -906,6 +1184,7 @@
         window.openAbout = function() {
             closeDetails();
             closeVideoArchive();
+            closeProjects();
             const aboutPanel = document.getElementById('about-page');
             if (aboutPanel) {
                 aboutPanel.style.display = 'block';
@@ -922,6 +1201,7 @@
         window.openVideoArchive = function() {
             closeDetails();
             closeAboutPanel();
+            closeProjects();
             var videoArchive = document.getElementById('video-archive-page');
             if (videoArchive) {
                 videoArchive.style.display = 'block';
@@ -936,10 +1216,36 @@
             }
         };
 
+        window.openProjects = function() {
+            closeDetails();
+            closeAboutPanel();
+            closeVideoArchive();
+            var projectsPage = document.getElementById('projects-page');
+            if (projectsPage) {
+                projectsPage.style.display = 'block';
+                populateProjects();
+            }
+        };
+
+        window.closeProjects = function() {
+            var projectsPage = document.getElementById('projects-page');
+            if (projectsPage) {
+                projectsPage.style.display = 'none';
+            }
+        };
+
         window.openContact = function() {
             // Contact via mailto instead of separate page
             window.location.href = 'mailto:ebe.sobe.kollektiv@gmail.com';
         };
+
+        document.addEventListener('keydown', function(e) {
+            var overlay = document.getElementById('book-fullscreen-overlay');
+            if (!overlay || !overlay.classList.contains('active')) return;
+            if (e.key === 'ArrowRight') flipBookSpread(1);
+            else if (e.key === 'ArrowLeft') flipBookSpread(-1);
+            else if (e.key === 'Escape') closeBookSpread();
+        });
 
         // Handle browser back/forward buttons
         window.addEventListener('popstate', function(event) {
@@ -1155,9 +1461,9 @@
         // To update: edit the CSV file, then run the update script or manually update this array
         const actListData = [
             { "Date": "September 2026", "Location": "Cottbus, DE", "Project Name Line 1": "EBE SOBE x Lausitz Biennale (TBA)", "Project Name Line 2": "Commonig Cottbus", "Status": "Active", "Clickable": "No" },
-            { "Date": "August 2026", "Location": "Istanbul, TR", "Project Name Line 1": "EBE SOBE x Superpool (TBA)", "Project Name Line 2": "\u00dcsk\u00fcdar", "Status": "Active", "Clickable": "No" },
-            { "Date": "May 2026", "Location": "Istanbul, TR", "Project Name Line 1": "EBE SOBE x Superpool (TBA)", "Project Name Line 2": "\u00dcsk\u00fcdar", "Status": "Active", "Clickable": "No" },
-            { "Date": "Feb. 14, 2026", "Location": "Berlin, DE", "Project Name Line 1": "Voices of Leopoldplatz x Kiosk of Solidarity", "Project Name Line 2": "Marketplace Leopoldplatz", "Status": "Active", "Clickable": "Yes" },
+            { "Date": "May 2026", "Location": "Milan, IT", "Project Name Line 1": "EBE SOBE x BASE Milan", "Project Name Line 2": "BASE Milan x ZONA K", "Status": "Active", "Clickable": "No" },
+            { "Date": "April 2026", "Location": "Istanbul, TR", "Project Name Line 1": "EBE SOBE x Superpool", "Project Name Line 2": "\u00dcsk\u00fcdar", "Status": "Active", "Clickable": "No" },
+            { "Date": "Feb. 14, 2026", "Location": "Berlin, DE", "Project Name Line 1": "Voices of Leopoldplatz x Kiosk of Solidarity", "Project Name Line 2": "Marketplace Leopoldplatz", "Status": "Done", "Clickable": "Yes" },
             { "Date": "Dec. 14, 2025", "Location": "Berlin, DE", "Project Name Line 1": "Voices of Leopoldplatz", "Project Name Line 2": "Playground Leopoldplatz", "Status": "Done", "Clickable": "Yes" }
         ];
         
@@ -1217,14 +1523,14 @@
 
             var creditHTML = '';
             if (date === 'Feb. 14, 2026') {
-                creditHTML = '<p style="margin-top:18px; font-size:0.85em; opacity:0.8;">All the images were taken by Monika Keiler. Please don\'t use any of these images without getting in touch with the photographer.</p>';
+                creditHTML = '<p style="margin-top:0; margin-bottom:18px; font-size:0.85em; opacity:0.8;">All the images were taken by Monika Keiler. Please don\'t use any of these images without getting in touch with the photographer.</p>';
             }
 
             var mainHTML = '<div class="work-header">' +
                 '<span class="location-part">' + location + '</span>' +
                 '<span class="project-part">' + projectNameLine1 + '</span>' +
                 '<span class="date-part">' + date + '</span>' +
-                '</div>' + imagesHTML + creditHTML;
+                '</div>' + creditHTML + imagesHTML;
 
             workDisplay.innerHTML = mainHTML;
         }
@@ -1327,6 +1633,178 @@
             container.innerHTML = html;
         }
 
+        // Projects registry — add your projects here
+        // Each project has a title, description, folder name (inside projects/), and image filenames
+        var projectEntries = [
+            {
+                title: 'pirate pedagogies',
+                subtitle: 'an educational program focusing on the relationship between urban aesthetic, sensory experience and our mental landscape',
+                folder: 'pirate pedagogies',
+                images: [
+                    'zine-07.jpg', 'zine-08.jpg', 'zine-09.jpg', 'zine-10.jpg',
+                    'zine-11.jpg', 'zine-12.jpg', 'zine-13.jpg', 'zine-14.jpg',
+                    'zine-15.jpg', 'zine-16.jpg', 'zine-17.jpg', 'zine-18.jpg',
+                    'zine-19.jpg', 'zine-20.jpg', 'zine-21.jpg', 'zine-27.jpg'
+                ],
+                description: '<p>PIRATE PEDAGOGIES is a site-specific project exploring the tactile and acoustic features of urban space through participatory workshops with children. Using a card game designed by the collective, the project creates a photographic card deck of materials found in playgrounds, each of which is paired with questions reflecting on synesthesia and narrative formation. Using the cards as a guide, the children engage with the space and its materials, experiencing it as a field of bodily experimentation and corporeal sense-making. Through play the materials address the children directly: \u201cbe curious, touch me, climb me\u201d.</p>' +
+                    '<p>The project sees the playground as a research site and pedagogical tool, inviting an exploration through texture, sound, and questions that highlight empathy, care and narrative building.</p>' +
+                    '<p>The urgency of this project lies in the transformation of public spaces into increasingly regulated, standardized, and risk-managed environments. This disciplinary turn of recreational spaces limits material engagement, preventing creativity from sparkling through informal and unpredictable play. The workshop approaches the playground as an architectural typology, reimagining it as a site of belonging creativity and corporeal encounter. This way, spontaneous play is emphasised and encouraged.</p>' +
+                    '<p>For children aged 6\u201312, the playground is often the realm where they can negotiate social and political norms, proximity, conflict and care beyond institutions. The work with this age group grounds this learning process in embodied experience and relational knowledge, empowering children to shape space collectively.</p>'
+            }
+        ];
+
+        function populateProjects() {
+            var container = document.getElementById('projects-book-container');
+            if (!container) return;
+
+            if (projectEntries.length === 0) {
+                container.innerHTML = '<p style="opacity:0.6; font-size:1em;">Coming soon.</p>';
+                return;
+            }
+
+            var html = '';
+            for (var p = 0; p < projectEntries.length; p++) {
+                var proj = projectEntries[p];
+                var folder = 'projects/' + proj.folder + '/';
+                var bookId = 'book-' + p;
+
+                html += '<div style="margin-bottom: 50px;">';
+                html += '<h3 style="font-family: \'monatalic\', var(--font-main); font-size: 1.47em; margin-bottom: 6px; font-weight: 700;">' + proj.title + '</h3>';
+
+                if (proj.subtitle) {
+                    html += '<p style="font-size: 0.85em; opacity: 0.7; margin-bottom: 20px; line-height: 1.6;">' + proj.subtitle + '</p>';
+                }
+
+                html += '<div class="book-preview">';
+                html += '<div class="book-preview-track" id="' + bookId + '-track">';
+                for (var i = 0; i < proj.images.length; i++) {
+                    var src = folder + encodeURIComponent(proj.images[i]);
+                    html += '<img src="' + src + '" alt="' + proj.title + ' - page ' + (i + 1) + '" onclick="openBookSpread(' + p + ', ' + i + ')">';
+                }
+                html += '</div>';
+                html += '</div>';
+
+                html += '<div class="book-nav">';
+                html += '<button onclick="flipBook(\'' + bookId + '\', -1)">‹</button>';
+                html += '<span class="book-page-indicator" id="' + bookId + '-indicator">1 / ' + proj.images.length + '</span>';
+                html += '<button onclick="flipBook(\'' + bookId + '\', 1)">›</button>';
+                html += '</div>';
+
+                if (proj.description) {
+                    html += '<div class="project-description">' + proj.description + '</div>';
+                }
+
+                html += '</div>';
+            }
+            container.innerHTML = html;
+        }
+
+        window.flipBook = function(bookId, direction) {
+            var track = document.getElementById(bookId + '-track');
+            var indicator = document.getElementById(bookId + '-indicator');
+            if (!track) return;
+
+            var images = track.querySelectorAll('img');
+            var total = images.length;
+            if (total === 0) return;
+
+            var current = parseInt(track.dataset.page || '0', 10);
+            var next = current + direction;
+            if (next < 0) next = 0;
+            if (next >= total) next = total - 1;
+
+            track.style.transform = 'translateX(-' + (next * 100) + '%)';
+            track.dataset.page = next;
+
+            if (indicator) {
+                indicator.textContent = (next + 1) + ' / ' + total;
+            }
+        };
+
+        var bookSpreadState = { projectIndex: 0, spreadIndex: 0, srcs: [] };
+
+        function getBookSpreads(projIndex) {
+            var proj = projectEntries[projIndex];
+            if (!proj) return [];
+            var folder = 'projects/' + proj.folder + '/';
+            var imgs = proj.images;
+            var spreads = [];
+            // First image is cover (single), then pairs, last single if odd remainder
+            spreads.push([folder + encodeURIComponent(imgs[0])]);
+            for (var i = 1; i < imgs.length; i += 2) {
+                if (i + 1 < imgs.length) {
+                    spreads.push([
+                        folder + encodeURIComponent(imgs[i]),
+                        folder + encodeURIComponent(imgs[i + 1])
+                    ]);
+                } else {
+                    spreads.push([folder + encodeURIComponent(imgs[i])]);
+                }
+            }
+            return spreads;
+        }
+
+        function renderSpread(spreads, index) {
+            var container = document.getElementById('book-spread');
+            var indicator = document.getElementById('book-spread-indicator');
+            if (!container) return;
+
+            var spread = spreads[index];
+            var html = '';
+            if (spread.length === 1) {
+                html = '<img class="single-page" src="' + spread[0] + '" alt="page">';
+            } else {
+                html = '<img src="' + spread[0] + '" alt="left page">' +
+                       '<img src="' + spread[1] + '" alt="right page">';
+            }
+            container.innerHTML = html;
+
+            if (indicator) {
+                indicator.textContent = (index + 1) + ' / ' + spreads.length;
+            }
+        }
+
+        window.openBookSpread = function(projIndex, imgIndex) {
+            var spreads = getBookSpreads(projIndex);
+            if (spreads.length === 0) return;
+
+            // Find which spread contains the clicked image
+            var spreadIdx = 0;
+            var count = 0;
+            for (var s = 0; s < spreads.length; s++) {
+                count += spreads[s].length;
+                if (imgIndex < count) { spreadIdx = s; break; }
+            }
+
+            bookSpreadState.projectIndex = projIndex;
+            bookSpreadState.spreadIndex = spreadIdx;
+            bookSpreadState.spreads = spreads;
+
+            renderSpread(spreads, spreadIdx);
+
+            var overlay = document.getElementById('book-fullscreen-overlay');
+            if (overlay) overlay.classList.add('active');
+        };
+
+        window.flipBookSpread = function(direction) {
+            var spreads = bookSpreadState.spreads;
+            if (!spreads || spreads.length === 0) return;
+
+            var next = bookSpreadState.spreadIndex + direction;
+            if (next < 0) next = 0;
+            if (next >= spreads.length) next = spreads.length - 1;
+
+            bookSpreadState.spreadIndex = next;
+            renderSpread(spreads, next);
+        };
+
+        window.closeBookSpread = function() {
+            var overlay = document.getElementById('book-fullscreen-overlay');
+            if (overlay) overlay.classList.remove('active');
+            var container = document.getElementById('book-spread');
+            if (container) container.innerHTML = '';
+        };
+
         window.openFullscreenVideo = function(videoUrl) {
             var overlay = document.getElementById('video-fullscreen-overlay');
             var iframe = document.getElementById('video-fullscreen-iframe');
@@ -1386,6 +1864,43 @@
             closeDetails();
             closeAboutPanel();
             closeVideoArchive();
+            closeProjects();
+        };
+
+        window.handleNewsletterSubmit = function(e) {
+            e.preventDefault();
+            var form = document.getElementById('newsletter-form');
+            var msg = document.getElementById('newsletter-msg');
+            var emailInput = form.querySelector('input[name="email"]');
+            var email = emailInput.value.trim();
+            if (!email) return false;
+
+            var btn = form.querySelector('button');
+            btn.textContent = '...';
+            btn.disabled = true;
+
+            fetch('https://formsubmit.co/ajax/ebe.sobe.kollektiv@gmail.com', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({
+                    email: email,
+                    _subject: 'New newsletter subscriber: ' + email
+                })
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                msg.textContent = 'thank you for subscribing!';
+                emailInput.value = '';
+                btn.textContent = 'subscribe';
+                btn.disabled = false;
+            })
+            .catch(function() {
+                msg.textContent = 'something went wrong, please try again.';
+                btn.textContent = 'subscribe';
+                btn.disabled = false;
+            });
+
+            return false;
         };
 
         if (document.readyState === 'loading') {
@@ -1405,6 +1920,17 @@
     <div class="image-fullscreen-overlay" id="image-fullscreen-overlay" onclick="closeFullscreenImage()">
         <button class="image-fullscreen-close" onclick="closeFullscreenImage()">×</button>
         <img id="image-fullscreen-img" src="" alt="">
+    </div>
+
+    <!-- Fullscreen book spread overlay -->
+    <div class="book-fullscreen-overlay" id="book-fullscreen-overlay">
+        <button class="book-fullscreen-close" onclick="closeBookSpread()">×</button>
+        <div class="book-spread" id="book-spread"></div>
+        <div class="book-fullscreen-nav">
+            <button onclick="flipBookSpread(-1)">‹</button>
+            <span class="book-fullscreen-indicator" id="book-spread-indicator"></span>
+            <button onclick="flipBookSpread(1)">›</button>
+        </div>
     </div>
 </body>
 </html>
