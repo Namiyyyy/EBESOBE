@@ -19,6 +19,7 @@
             --border-color: #dcb600;
             --font-main: 'Leelawadee', sans-serif;
             --font-mono: 'Leelawadee', sans-serif;
+            --font-size-base: 0.75rem;
         }
 
         /* --- SELF-HOSTED MONATALIC FONT (for UI text) --- */
@@ -56,6 +57,7 @@
             color: var(--text-color);
             overflow-x: hidden;
             background-color: black; /* Fallback color */
+            font-size: var(--font-size-base);
         }
 
         /* Default body / text font (Leelawadee). More specific rules like
@@ -343,33 +345,23 @@
             }
         }
 
-        /* --- PAGE 2: DETAIL POPUP (OVERLAY) --- */
-        #detail-page {
+        /* --- SHARED POPUP OVERLAY --- */
+        .popup-overlay {
             display: none;
             position: fixed;
-            top: 40px;
-            right: 40px;
-            bottom: 40px;
-            width: 450px;
-            max-width: calc(100vw - 80px);
-            background-color: var(--main-yellow);
-            font-family: var(--font-main);
-            font-size: 0.667rem;
-            z-index: 20;
-            border-radius: 12px;
-            flex-direction: column;
-            overflow: hidden;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.45);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 0;
         }
 
-        @media (max-width: 768px) {
-            #detail-page {
-                top: 0;
-                right: 0;
-                bottom: 0;
-                width: 100vw;
-                max-width: 100%;
-                border-radius: 0;
-            }
+        .popup-overlay.active {
+            display: flex;
         }
 
         .detail-header {
@@ -411,39 +403,40 @@
             text-decoration: underline; 
         }
 
-        /* --- PAGE 3: ABOUT PANEL (OVERLAY) --- */
-        #about-page {
-            display: none;
-            position: fixed;
-            top: 40px;
-            right: 40px;
-            bottom: 40px;
-            width: 450px;
-            max-width: calc(100vw - 80px);
-            background-color: var(--main-yellow);
-            font-family: var(--font-main);
-            font-size: 0.667rem;
-            z-index: 20;
-            border-radius: 12px;
-            overflow-y: auto;
-            padding: 30px;
-        }
-
-        @media (max-width: 768px) {
-            #about-page {
-                top: 0;
-                right: 0;
-                bottom: 0;
-                width: 100vw;
-                max-width: 100%;
-                border-radius: 0;
-                padding: 20px;
-            }
-        }
-
-        .about-content {
+        /* --- ABOUT / VIDEO ARCHIVE CONTENT --- */
+        .about-content,
+        .video-archive-content {
             max-width: 800px;
             margin: 0 auto;
+        }
+
+        .about-content h2,
+        .video-archive-content h2 {
+            font-family: 'monatalic', var(--font-main);
+            font-size: 1.47em;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        .about-content h3 {
+            font-family: 'monatalic', var(--font-main);
+            line-height: 1.8;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+
+        .about-content p,
+        .video-archive-content p {
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .about-content p.about-tight {
+            margin-bottom: 5px;
+        }
+
+        .about-content p.about-members {
+            margin-top: 30px;
         }
 
         .about-content [style*="'monatalic'"],
@@ -451,81 +444,11 @@
             font-weight: 700;
         }
 
-        /* --- PAGE 4: VIDEO ARCHIVE PANEL (OVERLAY) --- */
-        #video-archive-page {
-            display: none;
-            position: fixed;
-            top: 40px;
-            right: 40px;
-            bottom: 40px;
-            width: 450px;
-            max-width: calc(100vw - 80px);
-            background-color: var(--main-yellow);
-            font-family: var(--font-main);
-            font-size: 0.667rem;
-            z-index: 20;
-            border-radius: 12px;
-            overflow-y: auto;
-            padding: 30px;
-        }
-
-        @media (max-width: 768px) {
-            #video-archive-page {
-                top: 0;
-                right: 0;
-                bottom: 0;
-                width: 100vw;
-                max-width: 100%;
-                border-radius: 0;
-                padding: 20px;
-            }
-        }
-
-        .video-archive-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
         .video-credit {
             font-size: 0.85em;
             line-height: 1.6;
             margin-top: 15px;
             opacity: 0.8;
-        }
-
-        /* --- PAGE 5: PROJECTS PANEL (OVERLAY) --- */
-        #projects-page {
-            display: none;
-            position: fixed;
-            top: 40px;
-            right: 40px;
-            bottom: 40px;
-            width: 450px;
-            max-width: calc(100vw - 80px);
-            background-color: var(--main-yellow);
-            font-family: var(--font-main);
-            font-size: 0.667rem;
-            z-index: 20;
-            border-radius: 12px;
-            overflow-y: auto;
-            padding: 30px;
-        }
-
-        @media (max-width: 768px) {
-            #projects-page {
-                top: 0;
-                right: 0;
-                bottom: 0;
-                width: 100vw;
-                max-width: 100%;
-                border-radius: 0;
-                padding: 20px;
-            }
-        }
-
-        .projects-content {
-            max-width: 800px;
-            margin: 0 auto;
         }
 
         .book-preview {
@@ -606,28 +529,36 @@
 
         /* Custom scrollbar for popup panels */
         .work-display::-webkit-scrollbar,
+        .popup-info::-webkit-scrollbar,
+        .popup-scroll::-webkit-scrollbar,
+        .projects-scroll::-webkit-scrollbar,
         #about-page::-webkit-scrollbar,
-        #video-archive-page::-webkit-scrollbar,
-        #projects-page::-webkit-scrollbar {
+        #video-archive-page::-webkit-scrollbar {
             width: 6px;
         }
         .work-display::-webkit-scrollbar-track,
+        .popup-info::-webkit-scrollbar-track,
+        .popup-scroll::-webkit-scrollbar-track,
+        .projects-scroll::-webkit-scrollbar-track,
         #about-page::-webkit-scrollbar-track,
-        #video-archive-page::-webkit-scrollbar-track,
-        #projects-page::-webkit-scrollbar-track {
+        #video-archive-page::-webkit-scrollbar-track {
             background: var(--main-yellow);
         }
         .work-display::-webkit-scrollbar-thumb,
+        .popup-info::-webkit-scrollbar-thumb,
+        .popup-scroll::-webkit-scrollbar-thumb,
+        .projects-scroll::-webkit-scrollbar-thumb,
         #about-page::-webkit-scrollbar-thumb,
-        #video-archive-page::-webkit-scrollbar-thumb,
-        #projects-page::-webkit-scrollbar-thumb {
+        #video-archive-page::-webkit-scrollbar-thumb {
             background: black;
             border-radius: 3px;
         }
         .work-display,
+        .popup-info,
+        .popup-scroll,
+        .projects-scroll,
         #about-page,
-        #video-archive-page,
-        #projects-page {
+        #video-archive-page {
             scrollbar-width: thin;
             scrollbar-color: black var(--main-yellow);
         }
@@ -792,85 +723,200 @@
             background: rgba(255,255,255,0.3);
         }
 
-        .book-fullscreen-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0,0,0,0.95);
-            z-index: 9999;
+        /* Shared popup modal (projects + act detail) */
+        .popup-modal {
+            width: 60vw;
+            max-width: calc(100vw - 80px);
+            max-height: calc(100vh - 80px);
+            background-color: var(--main-yellow);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            font-family: var(--font-main);
+            font-size: var(--font-size-base);
+        }
+
+        .popup-columns {
+            display: flex;
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .popup-info {
+            flex: 1;
+            padding: 48px 30px 30px;
+            overflow-y: auto;
+            min-width: 0;
+        }
+
+        .popup-info h3 {
+            font-family: 'monatalic', var(--font-main);
+            font-size: 1.47em;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .popup-subtitle {
+            font-size: 0.85em;
+            opacity: 0.7;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .popup-info .project-description {
+            margin-top: 0;
+            line-height: 1.8;
+        }
+
+        .popup-info .project-description p {
+            margin-bottom: 16px;
+        }
+
+        .act-date {
+            font-size: 0.85em;
+            opacity: 0.7;
+            margin-bottom: 16px;
+        }
+
+        .popup-scroll,
+        .projects-scroll {
+            overflow-y: auto;
+            flex: 1;
+            min-height: 0;
+            padding: 48px 30px 30px;
+            scrollbar-width: thin;
+            scrollbar-color: black var(--main-yellow);
+        }
+
+        .popup-scroll::-webkit-scrollbar,
+        .projects-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .popup-scroll::-webkit-scrollbar-track,
+        .projects-scroll::-webkit-scrollbar-track {
+            background: var(--main-yellow);
+        }
+
+        .popup-scroll::-webkit-scrollbar-thumb,
+        .projects-scroll::-webkit-scrollbar-thumb {
+            background: black;
+            border-radius: 3px;
+        }
+
+        .projects-scroll {
+            padding-top: 48px;
+        }
+
+        .project-block {
+            min-height: 70vh;
+            border-bottom: 1px solid rgba(0,0,0,0.12);
+        }
+
+        .project-block:last-child {
+            border-bottom: none;
+        }
+
+        .project-block .popup-columns {
+            min-height: 70vh;
+        }
+
+        .project-block .popup-info {
+            overflow-y: visible;
+            padding-top: 30px;
+        }
+
+        .project-block .popup-subtitle {
+            font-size: 0.667rem;
+        }
+
+        .project-block .gallery-view img {
+            max-height: 55vh;
+        }
+
+        .popup-media {
+            flex: 0 0 48%;
+            display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 48px 24px 24px;
+            min-width: 0;
+            border-right: 1px solid rgba(0,0,0,0.12);
         }
 
-        .book-fullscreen-overlay.active {
-            display: flex;
-        }
-
-        .book-spread {
+        .gallery-view {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 4px;
-            max-width: 92vw;
-            max-height: 82vh;
+            width: 100%;
+            flex: 1;
+            min-height: 0;
         }
 
-        .book-spread img {
-            max-height: 80vh;
-            max-width: 45vw;
+        .gallery-view img {
+            max-height: calc(100vh - 220px);
+            max-width: 100%;
             object-fit: contain;
             display: block;
+            cursor: pointer;
         }
 
-        .book-spread img.single-page {
-            max-width: 50vw;
+        .gallery-view.book-spread img {
+            max-width: 48%;
         }
 
-        .book-fullscreen-nav {
+        .gallery-view.book-spread img.single-page {
+            max-width: 85%;
+        }
+
+        .gallery-nav {
             display: flex;
             align-items: center;
             gap: 30px;
-            margin-top: 20px;
+            margin-top: 16px;
+            flex-shrink: 0;
         }
 
-        .book-fullscreen-nav button {
-            background: rgba(255,255,255,0.15);
-            border: none;
+        .gallery-nav button {
+            background: rgba(0,0,0,0.06);
+            border: 1px solid rgba(0,0,0,0.35);
             border-radius: 50%;
-            width: 44px;
-            height: 44px;
-            color: white;
-            font-size: 1.4rem;
+            width: 36px;
+            height: 36px;
+            color: var(--text-color);
+            font-size: 1.2rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-family: var(--font-main);
         }
 
-        .book-fullscreen-nav button:hover {
-            background: rgba(255,255,255,0.3);
+        .gallery-nav button:hover {
+            background: rgba(0,0,0,0.12);
         }
 
-        .book-fullscreen-indicator {
-            color: rgba(255,255,255,0.6);
+        .gallery-indicator {
+            color: rgba(0,0,0,0.55);
             font-family: 'monatalic', var(--font-main);
             font-size: 0.9rem;
         }
 
-        .book-fullscreen-close {
+        .popup-close {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.15);
-            border: none;
+            top: 16px;
+            left: 16px;
+            width: 36px;
+            height: 36px;
+            background: rgba(0,0,0,0.06);
+            border: 1px solid rgba(0,0,0,0.2);
             border-radius: 50%;
-            color: white;
+            color: var(--text-color);
             font-size: 1.4rem;
             cursor: pointer;
             z-index: 10000;
@@ -878,22 +924,50 @@
             align-items: center;
             justify-content: center;
             line-height: 1;
+            font-family: var(--font-main);
         }
 
-        .book-fullscreen-close:hover {
-            background: rgba(255,255,255,0.3);
+        .popup-close:hover {
+            background: rgba(0,0,0,0.12);
         }
 
         @media (max-width: 768px) {
-            .book-spread {
-                flex-direction: column;
-                gap: 2px;
+            .popup-overlay {
+                padding: 16px 0;
             }
 
-            .book-spread img,
-            .book-spread img.single-page {
-                max-width: 92vw;
-                max-height: 44vh;
+            .popup-modal {
+                width: calc(100vw - 32px);
+                max-width: calc(100vw - 32px);
+                max-height: calc(100vh - 32px);
+            }
+
+            .popup-columns {
+                flex-direction: column;
+            }
+
+            .popup-info {
+                flex: none;
+                border-bottom: none;
+                padding: 20px 16px 24px;
+            }
+
+            .popup-media {
+                flex: none;
+                border-right: none;
+                border-bottom: 1px solid rgba(0,0,0,0.12);
+                padding: 44px 16px 16px;
+            }
+
+            .gallery-view {
+                flex: none;
+            }
+
+            .gallery-view img,
+            .gallery-view.book-spread img,
+            .gallery-view.book-spread img.single-page {
+                max-width: 92%;
+                max-height: 40vh;
             }
         }
 
@@ -1018,53 +1092,57 @@
     </section>
 
     <!-- === DETAIL / ARCHIVE PAGE === -->
-    <section id="detail-page">
-        <div class="detail-header">
-            <div class="back-btn" onclick="closeDetails()">×</div>
-            <div></div>
-        </div>
-
-        <div class="work-display" id="work-display">
-            <!-- Work images will be populated by JavaScript when act is selected -->
+    <section id="detail-page" class="popup-overlay">
+        <div class="popup-modal">
+            <button class="popup-close" onclick="closeDetails()">×</button>
+            <div class="popup-columns">
+                <div class="popup-media">
+                    <div class="gallery-view" id="act-gallery"></div>
+                    <div class="gallery-nav">
+                        <button onclick="flipActGallery(-1)">‹</button>
+                        <span class="gallery-indicator" id="act-gallery-indicator"></span>
+                        <button onclick="flipActGallery(1)">›</button>
+                    </div>
+                </div>
+                <div class="popup-info" id="act-popup-info"></div>
+            </div>
         </div>
     </section>
 
     <!-- === ABOUT PANEL (OVERLAY) === -->
-    <section id="about-page">
-        <div class="detail-header about-header">
-            <div class="back-btn" onclick="closeAboutPanel()">×</div>
-            <div></div>
-        </div>
-        <div class="about-content">
-            <h2 style="margin-bottom: 30px; font-size: 2em; font-family: 'monatalic', var(--font-main);">about</h2>
-            <p style="line-height: 1.8; margin-bottom: 20px;">
+    <section id="about-page" class="popup-overlay">
+        <div class="popup-modal">
+            <button class="popup-close" onclick="closeAboutPanel()">×</button>
+            <div class="popup-scroll about-content">
+            <h2>about</h2>
+            <p>
                 <span style="font-family: 'monatalic', var(--font-main);">ebe sobe kollektiv</span> is a collective for urban phenomenological experimentation. Through workshops and participarty practices, it creates a sensory index of urban space.
             </p>
-            <p style="line-height: 1.8; margin-bottom: 20px;">
+            <p>
                 At this phase of the project we focus on playgrounds, and our target group is children between 8-12. As we grow, we would like to test our practice on other architectural typologies of play.
             </p>
-            <p style="line-height: 1.8; margin-bottom: 20px;">
+            <p>
                 We are looking for venues we can recreate our format, make more workshops and reach more children. If you have a venue, or an event format that we can collaborate, please don't hesitate to <a href="#" onclick="openContact(); return false;" style="text-decoration: underline; color: var(--text-color);">reach us</a>!
             </p>
-            <h3 style="line-height: 1.8; margin-top: 30px; margin-bottom: 10px; font-family: 'monatalic', var(--font-main);">What does EBE SOBE mean?</h3>
-            <p style="line-height: 1.8; margin-bottom: 5px;">
+            <h3>What does EBE SOBE mean?</h3>
+            <p class="about-tight">
                 <strong>Ebe sobe</strong><br>
                 [ˈeːbə ˈzoːbə]<br>
                 <em>Turkish binomial pair / reduplication</em>
             </p>
-            <p style="line-height: 1.8; margin-bottom: 20px;">
+            <p>
                 Ebe sobe is an exclamation used when playing hide and seek. The word is a result of a specific grammatical rule in Turkish, which turns one word into a pair to make the meaning or the sound of the word stronger. The pair means that the people hiding are found by the catcher. The word pair indicates that the person caught by the "it" has been 'saved' by reaching the base before the "it" does. It is generally accepted that the French word "sauvé" evolved into "sobe" in Turkish through phonetic changes.
             </p>
-            <p style="line-height: 1.8; margin-bottom: 20px;">
+            <p>
                 The pair carries a tension as well as a movement in itself by containing two actors: the runner and the chaser. The reason why we picked that pair as the name of the collective is mainly to recreate that movement in the public sphere. The participants of the workshops or performances become both the chaser of a 'game' that makes the dwelling in a space more curious, while being the runner from conventional, disembodied ways of experiencing space.
             </p>
-            <p style="line-height: 1.8; margin-bottom: 20px;">
+            <p>
                 <strong>'EBE' in games:</strong> Represents the role of the person who "finds and catches those hiding" in games. In that sense, the meaning is based on the authority of the experienced/mother figure and the function of searching and finding.
             </p>
-            <p style="line-height: 1.8; margin-bottom: 20px;">
+            <p>
                 <strong>'SOBE' in games:</strong> A term used in games like hide-and-seek and blind man's bluff to describe a player who saves themselves by reaching the base before the "it" player, or who tags the 'it' player (by shouting "tag!").
             </p>
-            <p style="line-height: 1.8; margin-bottom: 20px; margin-top: 30px;">
+            <p class="about-members">
                 <strong><span style="font-family: 'monatalic', var(--font-main);">Collective Members:</span></strong><br>
                 Nina Abba<br>
                 Uzay Dogan<br>
@@ -1072,42 +1150,36 @@
                 Giovannina Sequera<br>
                 Sophia Wind
             </p>
-            <p style="line-height: 1.8; margin-bottom: 20px;">
+            <p>
                 <strong><span style="font-family: 'monatalic', var(--font-main);">Logo and Brand Design:</span></strong> <a href="https://www.instagram.com/scelebillus/" target="_blank" rel="noopener noreferrer" style="text-decoration: underline; color: var(--text-color);">Sena Celebi</a>
             </p>
-            <p style="line-height: 1.8; margin-bottom: 20px;">
+            <p>
                 <strong><span style="font-family: 'monatalic', var(--font-main);">Web Design:</span></strong> Gülsen Namiduru
             </p>
             </div>
+        </div>
     </section>
 
     <!-- === VIDEO ARCHIVE PANEL (OVERLAY) === -->
-    <section id="video-archive-page">
-        <div class="detail-header about-header">
-            <div class="back-btn" onclick="closeVideoArchive()">×</div>
-            <div></div>
-        </div>
-        <div class="video-archive-content">
-            <h2 style="margin-bottom: 30px; font-size: 2em; font-family: 'monatalic', var(--font-main);">video archive</h2>
+    <section id="video-archive-page" class="popup-overlay">
+        <div class="popup-modal">
+            <button class="popup-close" onclick="closeVideoArchive()">×</button>
+            <div class="popup-scroll video-archive-content">
+            <h2>video archive</h2>
             <div id="video-archive-list">
                 <!-- Videos will be populated by JS -->
+            </div>
             </div>
         </div>
     </section>
 
-    <!-- === PROJECTS PANEL (OVERLAY) === -->
-    <section id="projects-page">
-        <div class="detail-header about-header">
-            <div class="back-btn" onclick="closeProjects()">×</div>
-            <div></div>
+    <!-- === PROJECTS POPUP (opened via openProjects) === -->
+    <div class="popup-overlay" id="project-popup-overlay">
+        <div class="popup-modal">
+            <button class="popup-close" onclick="closeProjects()">×</button>
+            <div class="projects-scroll" id="projects-scroll-container"></div>
         </div>
-        <div class="projects-content">
-            <h2 style="margin-bottom: 30px; font-size: 2em; font-family: 'monatalic', var(--font-main);">projects</h2>
-            <div id="projects-book-container">
-                <!-- Book previews will be populated by JS -->
-            </div>
-        </div>
-    </section>
+    </div>
 
     <!-- === CONTACT PAGE === -->
     <section id="contact-page">
@@ -1149,8 +1221,7 @@
         getPageElements();
 
         function hideAllPages(keepLandingVisible = false) {
-            if (detailPage) detailPage.style.display = 'none';
-            if (aboutPage) aboutPage.style.display = 'none';
+            if (window.closeAllPopups) window.closeAllPopups();
             if (contactPage) contactPage.style.display = 'none';
             if (!keepLandingVisible && landingPage) landingPage.style.display = 'none';
         }
@@ -1169,8 +1240,7 @@
                     if (pageElement) pageElement.style.display = 'flex';
                     break;
                 case 'about':
-                    pageElement = document.getElementById('about-page');
-                    if (pageElement) pageElement.style.display = 'block';
+                    openAbout();
                     break;
                 case 'contact':
                     pageElement = document.getElementById('contact-page');
@@ -1187,16 +1257,20 @@
 
         window.closeDetails = function() {
             var detailPanel = document.getElementById('detail-page');
-            if (detailPanel) detailPanel.style.display = 'none';
+            if (detailPanel) detailPanel.classList.remove('active');
+            var info = document.getElementById('act-popup-info');
+            if (info) info.innerHTML = '';
+            var gallery = document.getElementById('act-gallery');
+            if (gallery) gallery.innerHTML = '';
+            actGalleryState.srcs = [];
+            actGalleryState.index = 0;
         };
 
         window.openDetails = function(actItem) {
-            closeAboutPanel();
-            closeVideoArchive();
-            closeProjects();
+            closeAllPopups();
             var detailPanel = document.getElementById('detail-page');
             if (detailPanel) {
-                detailPanel.style.display = 'flex';
+                detailPanel.classList.add('active');
                 if (actItem && typeof actItem === 'object') {
                     showActImages(actItem);
                 }
@@ -1204,29 +1278,25 @@
         };
 
         window.openAbout = function() {
-            closeDetails();
-            closeVideoArchive();
-            closeProjects();
+            closeAllPopups();
             const aboutPanel = document.getElementById('about-page');
             if (aboutPanel) {
-                aboutPanel.style.display = 'block';
+                aboutPanel.classList.add('active');
             }
         };
 
         window.closeAboutPanel = function() {
             const aboutPanel = document.getElementById('about-page');
             if (aboutPanel) {
-                aboutPanel.style.display = 'none';
+                aboutPanel.classList.remove('active');
             }
         };
 
         window.openVideoArchive = function() {
-            closeDetails();
-            closeAboutPanel();
-            closeProjects();
+            closeAllPopups();
             var videoArchive = document.getElementById('video-archive-page');
             if (videoArchive) {
-                videoArchive.style.display = 'block';
+                videoArchive.classList.add('active');
                 populateVideoArchive();
             }
         };
@@ -1234,26 +1304,30 @@
         window.closeVideoArchive = function() {
             var videoArchive = document.getElementById('video-archive-page');
             if (videoArchive) {
-                videoArchive.style.display = 'none';
+                videoArchive.classList.remove('active');
             }
         };
 
         window.openProjects = function() {
-            closeDetails();
-            closeAboutPanel();
-            closeVideoArchive();
-            var projectsPage = document.getElementById('projects-page');
-            if (projectsPage) {
-                projectsPage.style.display = 'block';
-                populateProjects();
-            }
+            closeAllPopups();
+            populateProjectsPopup();
+            var overlay = document.getElementById('project-popup-overlay');
+            if (overlay) overlay.classList.add('active');
         };
 
         window.closeProjects = function() {
-            var projectsPage = document.getElementById('projects-page');
-            if (projectsPage) {
-                projectsPage.style.display = 'none';
-            }
+            var overlay = document.getElementById('project-popup-overlay');
+            if (overlay) overlay.classList.remove('active');
+            var container = document.getElementById('projects-scroll-container');
+            if (container) container.innerHTML = '';
+            projectGalleryStates = {};
+        };
+
+        window.closeAllPopups = function() {
+            closeDetails();
+            closeAboutPanel();
+            closeVideoArchive();
+            closeProjects();
         };
 
         window.openContact = function() {
@@ -1262,11 +1336,8 @@
         };
 
         document.addEventListener('keydown', function(e) {
-            var overlay = document.getElementById('book-fullscreen-overlay');
-            if (!overlay || !overlay.classList.contains('active')) return;
-            if (e.key === 'ArrowRight') flipBookSpread(1);
-            else if (e.key === 'ArrowLeft') flipBookSpread(-1);
-            else if (e.key === 'Escape') closeBookSpread();
+            if (e.key !== 'Escape') return;
+            closeAllPopups();
         });
 
         // Handle browser back/forward buttons
@@ -1482,11 +1553,11 @@
         // This data is automatically updated from act-list-template.csv
         // To update: edit the CSV file, then run the update script or manually update this array
         const actListData = [
-            { "Date": "September 2026", "Location": "Cottbus, DE", "Project Name Line 1": "EBE SOBE x Lausitz Biennale (TBA)", "Project Name Line 2": "Commonig Cottbus", "Status": "Active", "Clickable": "No" },
-            { "Date": "May 2026", "Location": "Milan, IT", "Project Name Line 1": "EBE SOBE x BASE Milan", "Project Name Line 2": "BASE Milan x ZONA K", "Status": "Active", "Clickable": "No" },
-            { "Date": "April 2026", "Location": "Istanbul, TR", "Project Name Line 1": "EBE SOBE x Superpool", "Project Name Line 2": "\u00dcsk\u00fcdar", "Status": "Active", "Clickable": "No" },
-            { "Date": "Feb. 14, 2026", "Location": "Berlin, DE", "Project Name Line 1": "Voices of Leopoldplatz x Kiosk of Solidarity", "Project Name Line 2": "Marketplace Leopoldplatz", "Status": "Done", "Clickable": "Yes" },
-            { "Date": "Dec. 14, 2025", "Location": "Berlin, DE", "Project Name Line 1": "Voices of Leopoldplatz", "Project Name Line 2": "Playground Leopoldplatz", "Status": "Done", "Clickable": "Yes" }
+            { "Date": "Sep. 2026", "Location": "Cottbus, DE", "Project Name Line 1": "EBE SOBE x Lausitz Biennale (TBA)", "Project Name Line 2": "Commonig Cottbus, Pirate Pedagogies Workshop", "Status": "Active", "Clickable": "No" },
+            { "Date": "Aug. 18, 2026", "Location": "Berlin, DE", "Project Name Line 1": "Acoustic Playground", "Project Name Line 2": "Gallery Wedding, Audiovisual performance", "Status": "Active", "Clickable": "No" },
+            { "Date": "May. 09, 2026", "Location": "Milan, IT", "Project Name Line 1": "Do Knot Try This At Home", "Project Name Line 2": "BASE Milano, Performance", "Status": "Done", "Clickable": "Yes" },
+            { "Date": "Feb. 14, 2026", "Location": "Berlin, DE", "Project Name Line 1": "Voices of Leopoldplatz x Kiosk of Solidarity", "Project Name Line 2": "Marketplace Leopoldplatz, Pirate Pedagogies Workshop", "Status": "Done", "Clickable": "Yes" },
+            { "Date": "Dec. 14, 2025", "Location": "Berlin, DE", "Project Name Line 1": "Voices of Leopoldplatz", "Project Name Line 2": "Playground Leopoldplatz, Pirate Pedagogies Workshop", "Status": "Done", "Clickable": "Yes" }
         ];
         
         // Load act list data on page load
@@ -1511,6 +1582,10 @@
                 'KioskOfSolidarity_Leopoldplatz__M0A8881.jpg',
                 'KioskOfSolidarity_Leopoldplatz__M0A8887.jpg',
                 'KioskOfSolidarity_Leopoldplatz__M0A8939.jpg'
+            ],
+            '2026-05-09': [
+                'insta_BASE26-08.jpg',
+                'WhatsApp Image 2026-05-09 at 14.34.45.jpeg'
             ]
         };
 
@@ -1519,42 +1594,78 @@
             'Feb. 14, 2026': '2025-02-17'
         };
 
-        // --- 7. Show Act Images ---
-        function showActImages(actItem) {
-            const workDisplay = document.getElementById('work-display');
-            if (!workDisplay) return;
+        // --- 7. Act Gallery ---
+        var actGalleryState = { index: 0, srcs: [] };
 
+        function renderActGallery() {
+            var container = document.getElementById('act-gallery');
+            var indicator = document.getElementById('act-gallery-indicator');
+            var srcs = actGalleryState.srcs;
+            if (!container) return;
+
+            if (!srcs || srcs.length === 0) {
+                container.innerHTML = '<p style="opacity:0.5;">No images available.</p>';
+                if (indicator) indicator.textContent = '0 / 0';
+                return;
+            }
+
+            var idx = actGalleryState.index;
+            container.innerHTML = '<img src="' + srcs[idx] + '" alt="Act image ' + (idx + 1) + '" onclick="openFullscreenImage(this.src)" onerror="this.style.display=\'none\'">';
+            if (indicator) {
+                indicator.textContent = (idx + 1) + ' / ' + srcs.length;
+            }
+        }
+
+        window.flipActGallery = function(direction) {
+            var srcs = actGalleryState.srcs;
+            if (!srcs || srcs.length === 0) return;
+
+            var next = actGalleryState.index + direction;
+            if (next < 0) next = 0;
+            if (next >= srcs.length) next = srcs.length - 1;
+
+            actGalleryState.index = next;
+            renderActGallery();
+        };
+
+        function showActImages(actItem) {
             const location = actItem['Location'] || '';
             const projectNameLine1 = actItem['Project Name Line 1'] || '';
+            const projectNameLine2 = actItem['Project Name Line 2'] || '';
             const date = actItem['Date'] || '';
 
             var folderName = actFolderOverrides[date] || convertDateToFolderName(date, actItem);
             var imageFolder = 'act-images/' + folderName + '/';
             var knownFiles = actImageRegistry[folderName];
 
-            var imagesHTML = '';
-
+            var srcs = [];
             if (knownFiles && knownFiles.length > 0) {
                 for (var i = 0; i < knownFiles.length; i++) {
-                    var imgSrc = imageFolder + encodeURIComponent(knownFiles[i]);
-                    imagesHTML += '<div class="work-image">' +
-                        '<img src="' + imgSrc + '" alt="' + projectNameLine1 + ' - Image ' + (i + 1) + '" style="cursor:pointer" onclick="openFullscreenImage(this.src)" onerror="this.parentElement.style.display=\'none\'">' +
-                        '</div>';
+                    srcs.push(imageFolder + encodeURIComponent(knownFiles[i]));
                 }
             }
 
-            var creditHTML = '';
-            if (date === 'Feb. 14, 2026') {
-                creditHTML = '<p style="margin-top:0; margin-bottom:18px; font-size:0.85em; opacity:0.8;">All the images were taken by Monika Keiler. Please don\'t use any of these images without getting in touch with the photographer.</p>';
+            actGalleryState.srcs = srcs;
+            actGalleryState.index = 0;
+
+            var info = document.getElementById('act-popup-info');
+            if (info) {
+                var infoHTML = '<h3>' + projectNameLine1 + '</h3>';
+                if (location || projectNameLine2) {
+                    infoHTML += '<p class="popup-subtitle">';
+                    if (location) infoHTML += location;
+                    if (location && projectNameLine2) infoHTML += '<br>';
+                    if (projectNameLine2) infoHTML += projectNameLine2;
+                    infoHTML += '</p>';
+                }
+                infoHTML += '<p class="act-date">' + date + '</p>';
+                if (date === 'Feb. 14, 2026') {
+                    infoHTML += '<p style="margin-bottom:18px; font-size:0.85em; opacity:0.8;">All the images were taken by Monika Keiler. Please don\'t use any of these images without getting in touch with the photographer.</p>';
+                }
+                info.innerHTML = infoHTML;
             }
 
-            var mainHTML = '<div class="work-header">' +
-                '<span class="location-part">' + location + '</span>' +
-                '<span class="project-part">' + projectNameLine1 + '</span>' +
-                '<span class="date-part">' + date + '</span>' +
-                '</div>' + creditHTML + imagesHTML;
-
-            workDisplay.innerHTML = mainHTML;
+            renderActGallery();
         }
 
         // Helper function to convert CSV date to base folder name (without checking duplicates)
@@ -1662,125 +1773,89 @@
         // Each project has a title, description, folder name (inside projects/), and image filenames
         var projectEntries = [
             {
-                title: 'pirate pedagogies',
-                subtitle: 'an educational program focusing on the relationship between urban aesthetic, sensory experience and our mental landscape',
+                title: 'Pirate Pedagogies',
+                subtitle: 'a series of workshops<br>a methodology for embodied site analysis',
                 folder: 'pirate pedagogies',
                 images: [
-                    'zine-07.jpg', 'zine-08.jpg', 'zine-09.jpg', 'zine-10.jpg',
-                    'zine-11.jpg', 'zine-12.jpg', 'zine-13.jpg', 'zine-14.jpg',
-                    'zine-15.jpg', 'zine-16.jpg', 'zine-17.jpg', 'zine-18.jpg',
-                    'zine-19.jpg', 'zine-20.jpg', 'zine-21.jpg', 'zine-27.jpg'
+                    'zine-08.jpg', 'zine-09.jpg', 'zine-10.jpg', 'zine-11.jpg',
+                    'zine-12.jpg', 'zine-13.jpg', 'zine-14.jpg', 'zine-15.jpg',
+                    'zine-16.jpg', 'zine-17.jpg', 'zine-18.jpg', 'zine-19.jpg',
+                    'zine-20.jpg', 'zine-21.jpg', 'zine-27.jpg'
                 ],
-                description: '<p>PIRATE PEDAGOGIES is a site-specific project exploring the tactile and acoustic features of urban space through participatory workshops with children. Using a card game designed by the collective, the project creates a photographic card deck of materials found in playgrounds, each of which is paired with questions reflecting on synesthesia and narrative formation. Using the cards as a guide, the children engage with the space and its materials, experiencing it as a field of bodily experimentation and corporeal sense-making. Through play the materials address the children directly: \u201cbe curious, touch me, climb me\u201d.</p>' +
-                    '<p>The project sees the playground as a research site and pedagogical tool, inviting an exploration through texture, sound, and questions that highlight empathy, care and narrative building.</p>' +
-                    '<p>The urgency of this project lies in the transformation of public spaces into increasingly regulated, standardized, and risk-managed environments. This disciplinary turn of recreational spaces limits material engagement, preventing creativity from sparkling through informal and unpredictable play. The workshop approaches the playground as an architectural typology, reimagining it as a site of belonging creativity and corporeal encounter. This way, spontaneous play is emphasised and encouraged.</p>' +
-                    '<p>For children aged 6\u201312, the playground is often the realm where they can negotiate social and political norms, proximity, conflict and care beyond institutions. The work with this age group grounds this learning process in embodied experience and relational knowledge, empowering children to shape space collectively.</p>'
+                description: '<p>PIRATE PEDAGOGIES explores the tactile and acoustic features of urban space through participatory workshops with children. Using a card game designed by the collective, the project creates a photographic card deck of materials found in playgrounds, each of which is paired with questions reflecting on synesthesia and narrative formation.</p>' +
+                    '<p>Using the cards as a guide, the children engage with the space and its materials, experiencing it as a field of bodily experimentation and corporeal sense-making. Through play the materials address the children directly: \u201cbe curious, touch me, climb me\u201d.</p>' +
+                    '<p>The project approaches the playground as a research site and pedagogical tool, inviting an exploration through texture, sound, and questions that highlight empathy, care through more-than-human actors around us. The workshop reimagines playground as a site of belonging creativity and corporeal encounter. This way, spontaneous play is emphasised and encouraged.</p>'
+            },
+            {
+                title: 'Do Knot Try This At Home',
+                subtitle: 'a series of public performances<br>speculations on material intimacy, proximity and collective action',
+                folder: 'do knot try this at home',
+                galleryMode: 'single',
+                images: [
+                    'WhatsApp Image 2026-05-09 at 14.34.45.jpeg'
+                ],
+                description: '<p>These public performances focuse on creating a material landscape where everyone experiences collective intimacy and empathy. DO KNOT TRY THIS AT HOME, again focuses on material intimacy but through one material. It takes a material and speculates on different aspects of it in different scales, and contexts. Starting from a fingertip, we extend the sensation field to hand, and then the body, just as thread becoming a rope, and rope becoming a net and net becoming a space of negotiation.</p>' +
+                    '<p>The premise of this game is a transformation in claiming autonomy. Every material becomes an autonomous zone through a collective construction, directed by participants.</p>' +
+                    '<p>This is a game, but a serious one.</p>' +
+                    '<p>If one knot fails, everybody falls. If someone moves, people on the other side feels it. If a tension gets weak, the whole structure faces a threat.</p>' +
+                    '<p>Our gesture starts as a game of negotiating tension and balance, but transforms the spatial experience into a statement on society: \u201cWe all in on the same boat.\u201d</p>'
             }
         ];
 
-        function populateProjects() {
-            var container = document.getElementById('projects-book-container');
-            if (!container) return;
+        var projectGalleryStates = {};
 
-            if (projectEntries.length === 0) {
-                container.innerHTML = '<p style="opacity:0.6; font-size:1em;">Coming soon.</p>';
+        function getProjectGallerySlides(projIndex) {
+            var proj = projectEntries[projIndex];
+            if (!proj || !proj.images || proj.images.length === 0) return [];
+
+            var folder = 'projects/' + proj.folder + '/';
+            var imgs = proj.images;
+            var mode = proj.galleryMode || 'spread';
+            var slides = [];
+
+            if (mode === 'single') {
+                for (var i = 0; i < imgs.length; i++) {
+                    slides.push([folder + encodeURIComponent(imgs[i])]);
+                }
+                return slides;
+            }
+
+            // Zine spread mode: cover single, then pairs
+            slides.push([folder + encodeURIComponent(imgs[0])]);
+            for (var j = 1; j < imgs.length; j += 2) {
+                if (j + 1 < imgs.length) {
+                    slides.push([
+                        folder + encodeURIComponent(imgs[j]),
+                        folder + encodeURIComponent(imgs[j + 1])
+                    ]);
+                } else {
+                    slides.push([folder + encodeURIComponent(imgs[j])]);
+                }
+            }
+            return slides;
+        }
+
+        function renderProjectGallery(projIndex) {
+            var state = projectGalleryStates[projIndex];
+            var container = document.getElementById('project-gallery-' + projIndex);
+            var indicator = document.getElementById('project-gallery-indicator-' + projIndex);
+            if (!container || !state) return;
+
+            var spreads = state.spreads;
+            if (!spreads || spreads.length === 0) {
+                container.innerHTML = '<p style="opacity:0.5;">No images available.</p>';
+                if (indicator) indicator.textContent = '0 / 0';
                 return;
             }
 
-            var html = '';
-            for (var p = 0; p < projectEntries.length; p++) {
-                var proj = projectEntries[p];
-                var folder = 'projects/' + proj.folder + '/';
-                var bookId = 'book-' + p;
-
-                html += '<div style="margin-bottom: 50px;">';
-                html += '<h3 style="font-family: \'monatalic\', var(--font-main); font-size: 1.47em; margin-bottom: 6px; font-weight: 700;">' + proj.title + '</h3>';
-
-                if (proj.subtitle) {
-                    html += '<p style="font-size: 0.85em; opacity: 0.7; margin-bottom: 20px; line-height: 1.6;">' + proj.subtitle + '</p>';
-                }
-
-                html += '<div class="book-preview">';
-                html += '<div class="book-preview-track" id="' + bookId + '-track">';
-                for (var i = 0; i < proj.images.length; i++) {
-                    var src = folder + encodeURIComponent(proj.images[i]);
-                    html += '<img src="' + src + '" alt="' + proj.title + ' - page ' + (i + 1) + '" onclick="openBookSpread(' + p + ', ' + i + ')">';
-                }
-                html += '</div>';
-                html += '</div>';
-
-                html += '<div class="book-nav">';
-                html += '<button onclick="flipBook(\'' + bookId + '\', -1)">‹</button>';
-                html += '<span class="book-page-indicator" id="' + bookId + '-indicator">1 / ' + proj.images.length + '</span>';
-                html += '<button onclick="flipBook(\'' + bookId + '\', 1)">›</button>';
-                html += '</div>';
-
-                if (proj.description) {
-                    html += '<div class="project-description">' + proj.description + '</div>';
-                }
-
-                html += '</div>';
-            }
-            container.innerHTML = html;
-        }
-
-        window.flipBook = function(bookId, direction) {
-            var track = document.getElementById(bookId + '-track');
-            var indicator = document.getElementById(bookId + '-indicator');
-            if (!track) return;
-
-            var images = track.querySelectorAll('img');
-            var total = images.length;
-            if (total === 0) return;
-
-            var current = parseInt(track.dataset.page || '0', 10);
-            var next = current + direction;
-            if (next < 0) next = 0;
-            if (next >= total) next = total - 1;
-
-            track.style.transform = 'translateX(-' + (next * 100) + '%)';
-            track.dataset.page = next;
-
-            if (indicator) {
-                indicator.textContent = (next + 1) + ' / ' + total;
-            }
-        };
-
-        var bookSpreadState = { projectIndex: 0, spreadIndex: 0, srcs: [] };
-
-        function getBookSpreads(projIndex) {
-            var proj = projectEntries[projIndex];
-            if (!proj) return [];
-            var folder = 'projects/' + proj.folder + '/';
-            var imgs = proj.images;
-            var spreads = [];
-            // First image is cover (single), then pairs, last single if odd remainder
-            spreads.push([folder + encodeURIComponent(imgs[0])]);
-            for (var i = 1; i < imgs.length; i += 2) {
-                if (i + 1 < imgs.length) {
-                    spreads.push([
-                        folder + encodeURIComponent(imgs[i]),
-                        folder + encodeURIComponent(imgs[i + 1])
-                    ]);
-                } else {
-                    spreads.push([folder + encodeURIComponent(imgs[i])]);
-                }
-            }
-            return spreads;
-        }
-
-        function renderSpread(spreads, index) {
-            var container = document.getElementById('book-spread');
-            var indicator = document.getElementById('book-spread-indicator');
-            if (!container) return;
-
+            var index = state.spreadIndex;
             var spread = spreads[index];
             var html = '';
             if (spread.length === 1) {
-                html = '<img class="single-page" src="' + spread[0] + '" alt="page">';
+                html = '<img class="single-page" src="' + spread[0] + '" alt="page" onclick="openFullscreenImage(this.src)">';
             } else {
-                html = '<img src="' + spread[0] + '" alt="left page">' +
-                       '<img src="' + spread[1] + '" alt="right page">';
+                html = '<img src="' + spread[0] + '" alt="left page" onclick="openFullscreenImage(this.src)">' +
+                       '<img src="' + spread[1] + '" alt="right page" onclick="openFullscreenImage(this.src)">';
             }
             container.innerHTML = html;
 
@@ -1789,45 +1864,62 @@
             }
         }
 
-        window.openBookSpread = function(projIndex, imgIndex) {
-            var spreads = getBookSpreads(projIndex);
-            if (spreads.length === 0) return;
+        window.flipProjectGallery = function(projIndex, direction) {
+            var state = projectGalleryStates[projIndex];
+            if (!state || !state.spreads || state.spreads.length === 0) return;
 
-            // Find which spread contains the clicked image
-            var spreadIdx = 0;
-            var count = 0;
-            for (var s = 0; s < spreads.length; s++) {
-                count += spreads[s].length;
-                if (imgIndex < count) { spreadIdx = s; break; }
+            var next = state.spreadIndex + direction;
+            if (next < 0) next = 0;
+            if (next >= state.spreads.length) next = state.spreads.length - 1;
+
+            state.spreadIndex = next;
+            renderProjectGallery(projIndex);
+        };
+
+        function populateProjectsPopup() {
+            var container = document.getElementById('projects-scroll-container');
+            if (!container) return;
+
+            projectGalleryStates = {};
+            var html = '';
+
+            for (var p = 0; p < projectEntries.length; p++) {
+                var proj = projectEntries[p];
+                var spreads = getProjectGallerySlides(p);
+
+                projectGalleryStates[p] = {
+                    spreadIndex: 0,
+                    spreads: spreads
+                };
+
+                html += '<div class="project-block">';
+                html += '<div class="popup-columns">';
+                html += '<div class="popup-media">';
+                html += '<div class="gallery-view book-spread" id="project-gallery-' + p + '"></div>';
+                html += '<div class="gallery-nav">';
+                html += '<button onclick="flipProjectGallery(' + p + ', -1)">‹</button>';
+                html += '<span class="gallery-indicator" id="project-gallery-indicator-' + p + '"></span>';
+                html += '<button onclick="flipProjectGallery(' + p + ', 1)">›</button>';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="popup-info">';
+                html += '<h3>' + proj.title + '</h3>';
+                if (proj.subtitle) {
+                    html += '<p class="popup-subtitle">' + proj.subtitle + '</p>';
+                }
+                if (proj.description) {
+                    html += '<div class="project-description">' + proj.description + '</div>';
+                }
+                html += '</div>';
+                html += '</div>';
+                html += '</div>';
             }
 
-            bookSpreadState.projectIndex = projIndex;
-            bookSpreadState.spreadIndex = spreadIdx;
-            bookSpreadState.spreads = spreads;
+            container.innerHTML = html;
 
-            renderSpread(spreads, spreadIdx);
-
-            var overlay = document.getElementById('book-fullscreen-overlay');
-            if (overlay) overlay.classList.add('active');
-        };
-
-        window.flipBookSpread = function(direction) {
-            var spreads = bookSpreadState.spreads;
-            if (!spreads || spreads.length === 0) return;
-
-            var next = bookSpreadState.spreadIndex + direction;
-            if (next < 0) next = 0;
-            if (next >= spreads.length) next = spreads.length - 1;
-
-            bookSpreadState.spreadIndex = next;
-            renderSpread(spreads, next);
-        };
-
-        window.closeBookSpread = function() {
-            var overlay = document.getElementById('book-fullscreen-overlay');
-            if (overlay) overlay.classList.remove('active');
-            var container = document.getElementById('book-spread');
-            if (container) container.innerHTML = '';
+            for (var r = 0; r < projectEntries.length; r++) {
+                renderProjectGallery(r);
+            }
         };
 
         window.openFullscreenVideo = function(videoUrl) {
@@ -1885,13 +1977,6 @@
             history.replaceState({page: initialPage}, '', urlPath);
         }
 
-        window.closeAllPopups = function() {
-            closeDetails();
-            closeAboutPanel();
-            closeVideoArchive();
-            closeProjects();
-        };
-
         window.handleNewsletterSubmit = function(e) {
             e.preventDefault();
             var form = document.getElementById('newsletter-form');
@@ -1945,17 +2030,6 @@
     <div class="image-fullscreen-overlay" id="image-fullscreen-overlay" onclick="closeFullscreenImage()">
         <button class="image-fullscreen-close" onclick="closeFullscreenImage()">×</button>
         <img id="image-fullscreen-img" src="" alt="">
-    </div>
-
-    <!-- Fullscreen book spread overlay -->
-    <div class="book-fullscreen-overlay" id="book-fullscreen-overlay">
-        <button class="book-fullscreen-close" onclick="closeBookSpread()">×</button>
-        <div class="book-spread" id="book-spread"></div>
-        <div class="book-fullscreen-nav">
-            <button onclick="flipBookSpread(-1)">‹</button>
-            <span class="book-fullscreen-indicator" id="book-spread-indicator"></span>
-            <button onclick="flipBookSpread(1)">›</button>
-        </div>
     </div>
 </body>
 </html>
